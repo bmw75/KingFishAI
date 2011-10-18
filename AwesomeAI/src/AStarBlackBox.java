@@ -185,6 +185,7 @@ public class AStarBlackBox {
 		return sumDistance;
 	}
 
+	// have to fix this
 	public int getCostFromStart(State s) {
 		Board board = s.reconstructBoard();
 		// go through all marbles and add their distances to home area

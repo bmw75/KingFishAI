@@ -1,1 +1,15 @@
-Sup dawgs.
+Sup dawgs.  
+
+Always work from the AwesomeAI folder.
+
+When you want to test your code, go into the release folder and run
+./copyAI.sh or ./copyAndMakeAI in order to copy the files you modified
+from AwesomeAI into release.
+
+Then run ./runAwesome.sh in order to run our AI. You can see the results in
+p1.log or game.log.  You can also quickly see who won by running ./whoWon.sh
+
+REMEMBER:
+Take a look into copyAI to see which are the files that get copied from AwesomeAI
+into release. If you create a new class, or modified a new file then you'll want to
+make sure that this file is being listed in copyAI.sh.

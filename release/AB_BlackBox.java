@@ -2,9 +2,6 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 
-//import ABMaxTree.ABNode.HashableMove;
-
-
 public class AB_BlackBox {
 	public static enum Message{
 		MOVE_FOUND,NEED_TO_RECOMPUTE;
@@ -21,7 +18,7 @@ public class AB_BlackBox {
 			}
 		}
 	}
-	
+
 	//contains the precalculated alpha beta tree; the root node is always a max node
 	//can update its state if we're given two moves
 	//we can get the current max node; this node is either 
@@ -102,6 +99,7 @@ public class AB_BlackBox {
 		}
 		return node;
 	}
+
 	public minNode abMin(Board b, int depthLeft, float alpha, float beta){
 		int myTurn=b.getTurn();
 		int theirTurn=flipTurn(myTurn);
@@ -124,6 +122,7 @@ public class AB_BlackBox {
 		}
 		return node;
 	}
+
 	/*
 	private ABMaxTree.ABMaxNode alphaBetaMax(Board b,int depthLeft,float alpha,float beta){
 		if(depthLeft==1 || b.checkWin(b.getTurn()) || b.checkWin(flipTurn(b.getTurn()))){
@@ -167,13 +166,12 @@ public class AB_BlackBox {
 		return rootHere;
 	}
 	*/
+
 	private static int flipTurn(int turn){
 		if(turn==1)return 2;
 		else return 1;
 	}
-	
 
-	
 	// We go through all our marbles and get all possible locations we can move to.
 	// TODO: take into account moves that involve special pieces
 	public static HashSet<Move> getMoveSet(Board board) {
@@ -195,7 +193,7 @@ public class AB_BlackBox {
 		}
 		return moveSet;
 	}
-	
+
 	//higher utility is better
 	public static int utilityOfState(Board board, int turn) {
 		int targetR = -1;
@@ -253,6 +251,7 @@ public class AB_BlackBox {
 				this.c3 == m.c3;
 		}
 	}
+
 	private static class maxNode{
 		Map<HashableMove,minNode> branches;
 		float value;
