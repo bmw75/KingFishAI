@@ -1,3 +1,6 @@
+Git cheat sheet: help.github.com/git-cheat-sheets/
+
+What follows is just a list of things I found helpful:
 
 Forking the repo (you already did this if you are capable of reading this file):
 git clone git@github.com:jps327/KingFishAI.git
@@ -9,3 +12,27 @@ git fetch upstream
 
 This will make your forked repo point back to the original KingFishAI repo.
 
+IMPORTANT:
+It is recommended (but certainly not essential) that you do not work straight from the master branch.
+Always create new branches - branches are really helpful ways to test new things out.
+That way you can go trying to implement lots of different things at the same time.
+
+To create a branch and switch into it:
+git checkout -b mybranch
+
+To switch to a branch:
+git checkout 
+
+Once you've finished working on your branch and are ready to merge it back into the master branch:
+git checkout master
+git merge mybranch
+
+Deleting a branch:
+git branch -d mybranch
+
+Pushing your changes into to the repo:
+git push origin master
+
+Pulling in changes from the original repo: (always do this if you suspect the original repo may have changed)
+git fetch upstream
+git merge upstream/master
