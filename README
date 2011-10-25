@@ -13,3 +13,5 @@ REMEMBER:
 Take a look into copyAI to see which are the files that get copied from AwesomeAI
 into release. If you create a new class, or modified a new file then you'll want to
 make sure that this file is being listed in copyAI.sh.
+
+Also, added git_commands.txt where you can get helpful git shit.

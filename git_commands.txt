@@ -1,0 +1,11 @@
+
+Forking the repo (you already did this if you are capable of reading this file):
+git clone git@github.com:jps327/KingFishAI.git
+
+Then go into the folder that just got created:
+cd KingFishAI
+git remote add upstream git://github.com/jps327/KingFishAI.git
+git fetch upstream
+
+This will make your forked repo point back to the original KingFishAI repo.
+
