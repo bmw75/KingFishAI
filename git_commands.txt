@@ -14,8 +14,7 @@ This will make your forked repo point back to the original KingFishAI repo.
 
 IMPORTANT:
 It is recommended (but certainly not essential) that you do not work straight from the master branch.
-Always create new branches - branches are really helpful ways to test new things out.
-That way you can go trying to implement lots of different things at the same time.
+Create new branches - branches are really helpful ways to test new things out independently of each other.
 
 To create a branch and switch into it:
 git checkout -b mybranch
@@ -23,16 +22,23 @@ git checkout -b mybranch
 To switch to a branch:
 git checkout 
 
-Once you've finished working on your branch and are ready to merge it back into the master branch:
-git checkout master
-git merge mybranch
-
 Deleting a branch:
 git branch -d mybranch
 
-Pushing your changes into to the repo:
+COMMITTING AND PUSHING CHANGES:
+Committing changes (this does not yet push your changes to the original repo):
+git commit -a
+
+Once you've finished working on your branch and are ready to merge it back into your master branch:
+git checkout master
+git merge mybranch
+
+Pushing changes into to the repo (so that the rest of us can pull these changes and see what you've done):
 git push origin master
 
 Pulling in changes from the original repo: (always do this if you suspect the original repo may have changed)
 git fetch upstream
 git merge upstream/master
+
+Making sure that changes on master appear in your current branch:
+git rebase master
