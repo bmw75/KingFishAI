@@ -5,7 +5,6 @@ public abstract class Player {
 	Board board;
 	
 	private int myturn;
-	//public boolean opponentWin = false;
 	private Scanner sc;
 	
 	public Player(Scanner sc){

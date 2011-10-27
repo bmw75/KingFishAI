@@ -13,11 +13,11 @@ public class AStarBlackBox {
 			{15, 11}, {15, 13},
 			{14, 10}, {14, 12}, {14, 14},
 			{13, 9},  {13, 11}, {13, 13}, {13, 15} },
-			/* Bottom home */
-			{ {0, 12},
-				{1, 11}, {1, 13},
-				{2, 10}, {2, 12}, {2, 14},
-				{3, 9},  {3, 11}, {3, 13}, {3, 15} },
+		/* Bottom home */
+		{ {0, 12},
+			{1, 11}, {1, 13},
+			{2, 10}, {2, 12}, {2, 14},
+			{3, 9},  {3, 11}, {3, 13}, {3, 15} },
 	};
 
 	public AStarBlackBox(int playerTurn) {
@@ -119,6 +119,7 @@ public class AStarBlackBox {
 		return minNode;
 	}
 
+	// given a node, get all possible new stateNodes we can move to
 	public HashSet<StateNode> getNeighborNodes(StateNode node) {
 		Board board = node.getState().reconstructBoard();
 		HashSet<StateNode> neighborNodes = new HashSet<StateNode>();
@@ -171,9 +172,9 @@ public class AStarBlackBox {
 			return false;
 	}
 
+	// Heuristic cost: go through all marbles, add their distances to target area
 	public int getHeuristicCost(State s) {
 		Board board = s.reconstructBoard();
-		// go through all marbles and add their distances to target area
 		int sumDistance = 0;
 		for (int i = 0; i < 17; i++) {
 			for (int j = 0; j < 25; j++) {

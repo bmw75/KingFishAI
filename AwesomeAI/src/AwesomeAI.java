@@ -1,3 +1,6 @@
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.HashSet;
 import java.util.Scanner;
 import java.util.ArrayList;
@@ -14,7 +17,7 @@ public class AwesomeAI extends Player {
 
 	@Override
 	public String think() {
-		if (opponentMadeAMove) { // if we are the first move then this will be false
+		if (opponentMadeAMove) { // if we are the first move then this will be false at first
 			Move opponentMove = getOpponentsMove(currentState.reconstructBoard(), getBoard());
 			currentState = new State(opponentMove, currentState);
 		}
@@ -84,11 +87,17 @@ public class AwesomeAI extends Player {
 		return new Move(0, 0, 0, r1, c1, r2, c2, r3, c3);
 	}
 
+	public int getOpponentTurn() {
+		return Util.flipTurn(getMyturn());
+	}
+
 	public static void main(String args[]){
 		int turn = 1;
-		AwesomeAI p = new AwesomeAI(new Scanner(System.in));
+		Scanner sc = new Scanner(System.in);
+		createInitialBoardFile(sc);
+		AwesomeAI p = new AwesomeAI(sc);
 		
-		p.currentState =new State(null, null); // first state: no move, no parent
+		p.currentState = new State(null, null); // first state: no move, no parent
 		System.err.println("Init state");
 		Util.printBoard(p.getBoard());
 		Util.checkStateConsistency(p.currentState, p.getBoard());
@@ -128,10 +137,26 @@ public class AwesomeAI extends Player {
 			}
 			System.err.println(p.getBoard().toString('*'));
 			turn = 3-turn;
-		}	
+		}
 	}
 
-	public int getOpponentTurn() {
-		return Util.flipTurn(getMyturn());
+	// creates the file initboard.txt which we will use as our initial board
+	public static void createInitialBoardFile(Scanner sc) {
+		StringBuilder boardBuilder = new StringBuilder("");
+		System.in.mark(439);
+		for (int i = 0; i < 18; i++) {
+			boardBuilder.append(sc.nextLine());
+			boardBuilder.append("\n");
+		}
+
+		try {
+			System.in.reset();
+			sc.nextLine();
+			BufferedWriter out = new BufferedWriter(new FileWriter(Const.BOARD_FILE));
+			out.write(boardBuilder.toString());
+			out.close();
+		} catch (IOException e) {
+			System.err.println(e.toString());
+		}
 	}
 }
