@@ -309,7 +309,6 @@ public class Board {
 				moves.add(25*r2+c2);
 				jump(r2,c2,moves);
 			}
-
 		}
 	}
 

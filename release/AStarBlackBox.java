@@ -50,16 +50,16 @@ public class AStarBlackBox {
 		nodesToCheck.add(startNode);
 
 		while (!nodesToCheck.isEmpty()) {
+			statesVisited++;
 			StateNode chosenNode = getNodeWithLowestFScore(nodesToCheck);
-
 			/*
 			System.err.println("A* Chosen Node:");
 		 	System.err.println("H cost: "	+ chosenNode.getH());
 		 	System.err.println("G cost: "	+ chosenNode.getG());
-		 	System.err.println("F cost: "	+ chosenNode.getF());
 		 	System.err.println("Depth: "	+ chosenNode.getDepth());
-		 	System.err.println("States visited: "	+ statesVisited++);
+		 	System.err.println("States visited: "	+ statesVisited);
 			Util.printState(chosenNode.getState());
+		 	System.err.println("F cost: "	+ chosenNode.getF());
 			*/
 
 			if(goalTest(chosenNode.getState()) || chosenNode.getDepth() >= numMoveCutoff){
@@ -76,6 +76,8 @@ public class AStarBlackBox {
 			for (StateNode neighbor : neighborNodes) {
 				if (!hashedNodes.contains(neighbor)) {
 					int newGScore = getCostFromStart(neighbor.getState());
+					// g (cost from goal) will simply be a count of number of moves
+					// int newGScore = chosenNode.getG() + 1;
 					boolean useNewG = false;
 
 					if (!nodesToCheck.contains(neighbor)) {
@@ -99,6 +101,8 @@ public class AStarBlackBox {
 	// backtrack all the way to the start state to get all moves
 	public void setWinningMoveList(State s, State start) {
 		if (s.getParent().equals(start)) {
+			System.err.println("Number of states visited: " + statesVisited);
+			statesVisited = 0;
 			winningMoves.add(s.getMove());
 		} else {
 			setWinningMoveList(s.getParent(), start);
@@ -121,7 +125,7 @@ public class AStarBlackBox {
 
 	// given a node, get all possible new stateNodes we can move to
 	public HashSet<StateNode> getNeighborNodes(StateNode node) {
-		Board board = node.getState().reconstructBoard();
+		int[][] board = node.getState().reconstructBoardArray();
 		HashSet<StateNode> neighborNodes = new HashSet<StateNode>();
 
 		// go through all our marbles and get all possible locations we can move to.
@@ -129,9 +133,9 @@ public class AStarBlackBox {
 		// TODO: take into account moves that involve special pieces
 		for (int i = 0; i < 17; i++) {
 			for (int j = 0; j < 25; j++) {
-				if (board.at(i, j) == turn) {
+				if (board[i][j] == turn) {
 					HashSet<Integer> destinations = new HashSet<Integer>();
-					board.legalMoves(i, j, destinations);
+					Util.getBoardLegalMoves(i, j, destinations, board);
 					for (Integer dest : destinations) {
 						int r = dest / 25;
 						int c = dest % 25;
@@ -148,7 +152,7 @@ public class AStarBlackBox {
 	}
 
 	public boolean goalTest(State state) {
-		Board board = state.reconstructBoard();
+		int[][] board = state.reconstructBoardArray();
 
 		// this is essentially a copy of what is in Board.java
 		// but it is helpful to have it here in case we want to modify something
@@ -159,8 +163,8 @@ public class AStarBlackBox {
 		for(int j=0; j<10; j++){
 			int x = homexy[2-turn][j][0];
 			int y = homexy[2-turn][j][1];
-			if (board.at(x, y) != 0){
-				marbles[board.at(x, y)-1] += 1;
+			if (board[x][y] != 0){
+				marbles[board[x][y]-1] += 1;
 			}
 		}
 		//If all places in the opponent's home are occupied and
@@ -174,12 +178,12 @@ public class AStarBlackBox {
 
 	// Heuristic cost: go through all marbles, add their distances to target area
 	public int getHeuristicCost(State s) {
-		Board board = s.reconstructBoard();
+		int[][] board = s.reconstructBoardArray();
 		int sumDistance = 0;
 		for (int i = 0; i < 17; i++) {
 			for (int j = 0; j < 25; j++) {
-				if (board.at(i, j) == turn) {
-					sumDistance += Board.dist(i, j, targetR, targetC);
+				if (board[i][j] == turn) {
+					sumDistance += Util.dist(i, j, targetR, targetC);
 				}
 			}
 		}
@@ -188,6 +192,7 @@ public class AStarBlackBox {
 
 	// have to fix this
 	public int getCostFromStart(State s) {
+		/*
 		Board board = s.reconstructBoard();
 		// go through all marbles and add their distances to home area
 		int sumDistance = 0;
@@ -198,7 +203,8 @@ public class AStarBlackBox {
 				}
 			}
 		}
-//		return sumDistance;
+		return sumDistance;
+		*/
 		return 0;
 	}
 }

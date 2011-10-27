@@ -24,20 +24,18 @@ public class State {
 
 	@Override
 	public int hashCode() {
-		Board b = MoveHasher.reconstructState(this);
-		int[][] board = new int[17][25];
-		for (int i = 0; i < 17; i++) {
-			for (int j = 0; j < 25; j++) {
-				board[i][j] = b.at(i, j);
-			}
-		}
+		int[][] board = this.reconstructBoardArray();
 		return Arrays.deepHashCode(board);
 	}
 
 	@Override
 	public boolean equals(Object o) {
 		State otherState = (State) o;
-		return equalsBoard(otherState.reconstructBoard());
+		return equalsBoard(otherState.reconstructBoardArray());
+	}
+
+	public boolean equalsBoard(int[][] b) {
+		return Arrays.deepEquals(this.reconstructBoardArray(), b);
 	}
 
 	public boolean equalsBoard(Board b) {
@@ -55,10 +53,30 @@ public class State {
 	}
 
 	/*
-	 * reconstructBoard will get the board that the current
+	 * reconstructBoardArray will get the board array that the current
 	 * state represents. It goes from the current state
 	 * all the way to the initial state and reproduces all the moves
-	 * along the way in order to generate the board.
+	 * in order to generate the board.
+	 */
+	public int[][] reconstructBoardArray() {
+		if (this.parent == null) {
+			return Util.copyBoardArray(AwesomeAI.initialBoard);
+		} else {
+			int[][] b = this.parent.reconstructBoardArray();
+			Util.performMoveOnBoard(this.move, b);
+			return b;
+		}
+	}
+
+	/*
+	 * reconstructBoard will get the Board that the current
+	 * state represents. It goes from the current state
+	 * all the way to the initial state and reproduces all the moves
+	 * in order to generate the board.
+	 *
+	 * Avoid using this function - it is slow. It requires i/o to
+	 * read the initial board configuration from a file in order to
+	 * create the new Board class instance.
 	 */
 	public Board reconstructBoard() {
 		if (this.parent == null) {

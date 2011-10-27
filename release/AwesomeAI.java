@@ -6,11 +6,12 @@ import java.util.Scanner;
 import java.util.ArrayList;
 
 public class AwesomeAI extends Player {
+	public static int[][] initialBoard = new int[Const.BOARD_HEIGHT][Const.BOARD_WIDTH];
 	State currentState;
 	boolean opponentMadeAMove;
 	ArrayList<Move> aStarWinningMoveList;
   AStarBlackBox aStarBlackBox;
-	
+
 	public AwesomeAI(Scanner scanner) {
 		super(scanner);
 	}
@@ -18,7 +19,7 @@ public class AwesomeAI extends Player {
 	@Override
 	public String think() {
 		if (opponentMadeAMove) { // if we are the first move then this will be false at first
-			Move opponentMove = getOpponentsMove(currentState.reconstructBoard(), getBoard());
+			Move opponentMove = getOpponentsMove(currentState.reconstructBoardArray(), Util.getArrayFromBoard(getBoard()));
 			currentState = new State(opponentMove, currentState);
 		}
 		
@@ -48,14 +49,14 @@ public class AwesomeAI extends Player {
 		Util.checkStateConsistency(currentState, getBoard());
 
 		System.err.println("My move: " + m.r1+" "+m.c1+" "+m.r2+" "+m.c2 + " "+ m.r3+" "+ m.c3);
-		
+	
 		return m.r1+" "+m.c1+" "+m.r2+" "+m.c2 + " "+ m.r3+" "+ m.c3;
 	}
 	
 	/*
 	 * Get the opponent's move by comparing the old board with the new board to see what happened.
 	 */
-	public Move getOpponentsMove(Board board1, Board board2) {
+	public Move getOpponentsMove(int[][] board1, int[][] board2) {
 		int r1 = -1;
 		int c1 = -1;
 		int r2 = -1;
@@ -67,15 +68,15 @@ public class AwesomeAI extends Player {
 
 		for (int i = 0; i < 17; i++) {
 			for (int j = 0; j < 25; j++) {
-				if (board1.at(i, j) == oppTurn && board2.at(i, j) == 0) {
+				if (board1[i][j] == oppTurn && board2[i][j] == 0) {
 					r1 = i;
 					c1 = j;
 				}
-				if (board1.at(i, j) == 0  && board2.at(i, j) == oppTurn) {
+				if (board1[i][j] == 0  && board2[i][j] == oppTurn) {
 					r2 = i;
 					c2 = j;
 				}
-				if (board1.at(i, j) == 0 && board2.at(i, j) == 3) {
+				if (board1[i][j] == 0 && board2[i][j] == 3) {
 					r3 = i;
 					c3 = j;
 				}
@@ -101,6 +102,11 @@ public class AwesomeAI extends Player {
 		System.err.println("Init state");
 		Util.printBoard(p.getBoard());
 		Util.checkStateConsistency(p.currentState, p.getBoard());
+		for (int i = 0; i < Const.BOARD_HEIGHT; i++) {
+			for (int j = 0; j < Const.BOARD_WIDTH; j++) {
+				AwesomeAI.initialBoard[i][j] = p.getBoard().at(i, j);
+			}
+		}
 
 		p.aStarBlackBox = new AStarBlackBox(p.getMyturn());
 		p.aStarBlackBox.setMoveCutoff(5);
