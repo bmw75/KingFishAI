@@ -27,7 +27,7 @@ public class AwesomeAI extends Player {
 		//below is code to edit to make your own behavior\\
 		
 		
-		//Nikita's alpha/beta
+		// Nikita's alpha/beta
 		
 		AB_BlackBox abbox=new AB_BlackBox(getMyturn());
 		AB_BlackBox.Message output=abbox.gimmeAMove(getBoard(), 5);
