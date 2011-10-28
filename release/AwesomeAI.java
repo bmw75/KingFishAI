@@ -23,6 +23,23 @@ public class AwesomeAI extends Player {
 		}
 		
 		Move m = null;
+		
+		//below is code to edit to make your own behavior\\
+		
+		
+		//Nikita's alpha/beta
+		
+		AB_BlackBox abbox=new AB_BlackBox(getMyturn());
+		AB_BlackBox.Message output=abbox.gimmeAMove(getBoard(), 5);
+		if(output==AB_BlackBox.Message.NEED_TO_RECOMPUTE){
+			System.err.println("oh no, ab search not finding a move. sending null move");
+		}else{
+			m=output.getMove();
+		}
+		
+		
+		/*
+		//Pablo's A*
 
 		if (!aStarWinningMoveList.isEmpty()) {
 			m = aStarWinningMoveList.remove(0);
@@ -33,14 +50,17 @@ public class AwesomeAI extends Player {
 			aStarWinningMoveList = aStarBlackBox.aStarSearch(currentState);
 			m = aStarWinningMoveList.remove(0);
 		}
-  	if (!board.validateSimpleMove(m.r1,m.c1,m.r2,m.c2,m.r3,m.c3,getMyturn())) {
+		if (!board.validateSimpleMove(m.r1,m.c1,m.r2,m.c2,m.r3,m.c3,getMyturn())) {
 			System.err.println("Invalid move happened. Calculating new sequence.");
 			aStarWinningMoveList = aStarBlackBox.aStarSearch(currentState);
 			m = aStarWinningMoveList.remove(0);
 		}
+  		*/
 
-//    System.err.println("Is move valid? " + board.validateSimpleMove(m.r1,m.c1,m.r2,m.c2,m.r3,m.c3,getMyturn()));
+		//System.err.println("Is move valid? " + board.validateSimpleMove(m.r1,m.c1,m.r2,m.c2,m.r3,m.c3,getMyturn()));
 
+  		//////////////////////-------------------------------//////////////////////////
+  		//standard end of think() method----always use the code below
 		// perform the move before sending it
 		board.move(m);
 		currentState = new State(m, currentState);
