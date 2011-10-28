@@ -15,3 +15,7 @@ into release. If you create a new class, or modified a new file then you'll want
 make sure that this file is being listed in copyAI.sh.
 
 Also, added git_commands.txt where you can get helpful git shit.
+
+Finally, to submit the AI into the server you need to create a tar gzip file.
+Here be the magic command:
+tar -cvzf kingFishAI.tar.gz release

@@ -35,6 +35,10 @@ public class AStarBlackBox {
 		numMoveCutoff = numMoveLimit;
 	}
 
+	public int getMoveCutoff() {
+		return numMoveCutoff;
+	}
+
 	/*
 	 * Runs AStar search and returns a list of all moves
 	 * that must be taken to win.
@@ -46,7 +50,7 @@ public class AStarBlackBox {
 		statesVisited = 0;
 		HashSet<StateNode> hashedNodes = new HashSet<StateNode>(); // Nodes we've already checked
 		ArrayList<StateNode> nodesToCheck = new ArrayList<StateNode>();
-		StateNode startNode = new StateNode(start, getCostFromStart(start), getHeuristicCost(start));
+		StateNode startNode = new StateNode(start, 0, getHeuristicCost(start));
 		nodesToCheck.add(startNode);
 
 		while (!nodesToCheck.isEmpty()) {
@@ -75,9 +79,8 @@ public class AStarBlackBox {
 
 			for (StateNode neighbor : neighborNodes) {
 				if (!hashedNodes.contains(neighbor)) {
-					int newGScore = getCostFromStart(neighbor.getState());
 					// g (cost from goal) will simply be a count of number of moves
-					// int newGScore = chosenNode.getG() + 1;
+					int newGScore = chosenNode.getG() + 1;
 					boolean useNewG = false;
 
 					if (!nodesToCheck.contains(neighbor)) {
@@ -183,29 +186,11 @@ public class AStarBlackBox {
 		for (int i = 0; i < 17; i++) {
 			for (int j = 0; j < 25; j++) {
 				if (board[i][j] == turn) {
-					sumDistance += Util.dist(i, j, targetR, targetC);
+					sumDistance += Util.euclideanDistSq(i, j, targetR, targetC);
 				}
 			}
 		}
 		return sumDistance;
-	}
-
-	// have to fix this
-	public int getCostFromStart(State s) {
-		/*
-		Board board = s.reconstructBoard();
-		// go through all marbles and add their distances to home area
-		int sumDistance = 0;
-		for (int i = 0; i < 17; i++) {
-			for (int j = 0; j < 25; j++) {
-				if (board.at(i, j) == turn) {
-					sumDistance += Board.dist(i, j, homeR, homeC);
-				}
-			}
-		}
-		return sumDistance;
-		*/
-		return 0;
 	}
 }
 

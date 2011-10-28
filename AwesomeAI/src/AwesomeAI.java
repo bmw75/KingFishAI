@@ -35,7 +35,8 @@ public class AwesomeAI extends Player {
 			m = aStarWinningMoveList.remove(0);
 		}
   	if (!board.validateSimpleMove(m.r1,m.c1,m.r2,m.c2,m.r3,m.c3,getMyturn())) {
-			System.err.println("Invalid move happened. Calculating new sequence.");
+			System.err.println("Invalid move happened. There were still " +
+					(aStarWinningMoveList.size()) + " moves left. Calculating new sequence.");
 			aStarWinningMoveList = aStarBlackBox.aStarSearch(currentState);
 			m = aStarWinningMoveList.remove(0);
 		}
@@ -46,7 +47,7 @@ public class AwesomeAI extends Player {
 		board.move(m);
 		currentState = new State(m, currentState);
 		
-		Util.checkStateConsistency(currentState, getBoard());
+//		Util.checkStateConsistency(currentState, getBoard());
 
 		System.err.println("My move: " + m.r1+" "+m.c1+" "+m.r2+" "+m.c2 + " "+ m.r3+" "+ m.c3);
 	

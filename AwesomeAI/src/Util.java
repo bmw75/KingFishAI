@@ -37,6 +37,10 @@ public class Util {
 		return newBoard;
 	}
 
+	public static int euclideanDistSq(int r1, int c1, int r2,int c2){
+		return (r2-r1)*(r2-r1)+(c2-c1)*(c2-c1);
+	}
+
 	public static int dist(int r1, int c1, int r2,int c2){
 		int dr = r2 - r1;
 		int ds = (r1+c1-r2-c2)/2;
@@ -47,7 +51,6 @@ public class Util {
 			return Math.max(Math.abs(dr), Math.abs(ds));
 		}
 	}
-
 	public static void getBoardLegalMoves(int r, int c, HashSet<Integer> moves, int[][] board){
 		moves.clear();
 		/* Immediate moves */
