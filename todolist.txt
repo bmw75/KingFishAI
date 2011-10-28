@@ -1,0 +1,29 @@
+- General
+	> Fix the distance function to prioritize straight movement up to target area, instead of going diagonally to the sides.
+	> Get a function that can determine how close we are to the opponent
+		(i.e. are we close enough to interact with them? Have we already passed them and are now racing to the finish?)
+	> Write a function that checks if an opponent's piece is trapped by our pieces in their home area.
+		If this is the case then we can start ignoring one of our own pieces and use it as a defensive piece (because we now
+		require one less piece in their home area in order to win).
+	> Is there any optimal placement of special marble?
+
+- A* Search
+	> Get a proper g cost working (cost from goal) in order to get a better A*.
+	> Currently our A* only looks 5 moves ahead. Test with different amounts.
+	> Make A* take into account placing special marbles.
+
+- Opening/Closing moves
+	> Use A* search for opening move sequence or look into a permanent set of "best opening sequence" moves.
+	> Once we have passed the opponent and are racing to the finish just go straight with A* to get to the target area as fast as possible.
+
+- Alpha-Beta Search
+	> Get a working AB Search that looks a few moves ahead (probably 3? Test with different numbers).
+	> Make sure it takes into account placing special marble.
+	> Use AB search only once we are close enough to the opponent such that opponent interaction becomes important.
+
+- Classification
+	> Is there any way in which we can classify the opponent?
+	> Depending on how he's classified, are there any counter-strategies?
+
+- Learning
+	> Figure out how to implement Machine Learning algorithms and collect data.
