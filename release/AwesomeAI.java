@@ -27,7 +27,6 @@ public class AwesomeAI extends Player {
 		
 		//below is code to edit to make your own behavior\\
 		
-		
 		//Nikita's alpha/beta
 		
 		AB_BlackBox abbox=new AB_BlackBox(getMyturn());
@@ -51,23 +50,18 @@ public class AwesomeAI extends Player {
 			aStarWinningMoveList = aStarBlackBox.aStarSearch(currentState);
 			m = aStarWinningMoveList.remove(0);
 		}
-<<<<<<< HEAD
   	if (!board.validateSimpleMove(m.r1,m.c1,m.r2,m.c2,m.r3,m.c3,getMyturn())) {
 			System.err.println("Invalid move happened. There were still " +
 					(aStarWinningMoveList.size()) + " moves left. Calculating new sequence.");
-=======
-		if (!board.validateSimpleMove(m.r1,m.c1,m.r2,m.c2,m.r3,m.c3,getMyturn())) {
-			System.err.println("Invalid move happened. Calculating new sequence.");
->>>>>>> 02107b3f83c4d9129dad7e371d65e581055a31b9
 			aStarWinningMoveList = aStarBlackBox.aStarSearch(currentState);
 			m = aStarWinningMoveList.remove(0);
 		}
-  		*/
+  	*/
 
 		//System.err.println("Is move valid? " + board.validateSimpleMove(m.r1,m.c1,m.r2,m.c2,m.r3,m.c3,getMyturn()));
 
-  		//////////////////////-------------------------------//////////////////////////
-  		//standard end of think() method----always use the code below
+  	//////////////////////-------------------------------//////////////////////////
+  	//standard end of think() method----always use the code below
 		// perform the move before sending it
 		board.move(m);
 		currentState = new State(m, currentState);

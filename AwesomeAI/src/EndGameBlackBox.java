@@ -17,10 +17,34 @@ import java.util.ArrayList;
 
 public class EndGameBlackBox {
 	ArrayList<Cell> targetCells;
+	int currentTarget;
 
-	public EndGameBlackBox() {
+	public EndGameBlackBox(int turn) {
+		currentTarget= 0;
 		targetCells = new ArrayList<Cell>();
-
+		if (turn == 1) {
+			targetCells.add(new Cell(13, 9));
+			targetCells.add(new Cell(13, 11));
+			targetCells.add(new Cell(13, 13));
+			targetCells.add(new Cell(13, 15));
+			targetCells.add(new Cell(14, 10));
+			targetCells.add(new Cell(14, 12));
+			targetCells.add(new Cell(14, 14));
+			targetCells.add(new Cell(15, 11));
+			targetCells.add(new Cell(15, 13));
+			targetCells.add(new Cell(16, 12));
+		} else {
+			targetCells.add(new Cell(3, 9));
+			targetCells.add(new Cell(3, 11));
+			targetCells.add(new Cell(3, 13));
+			targetCells.add(new Cell(3, 15));
+			targetCells.add(new Cell(2, 10));
+			targetCells.add(new Cell(2, 12));
+			targetCells.add(new Cell(2, 14));
+			targetCells.add(new Cell(1, 11));
+			targetCells.add(new Cell(1, 13));
+			targetCells.add(new Cell(0, 12));
+		}
 	}
 
 	class Cell {
