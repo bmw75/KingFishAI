@@ -26,10 +26,10 @@ public class AB_BlackBox {
 			}
 		}
 	}
-	
+
 	int thisPlayer;
 	int otherPlayer;
-	//hi!!
+
 	public AB_BlackBox(int whichPlayer){
 		thisPlayer=whichPlayer;
 		otherPlayer=3-thisPlayer;
@@ -46,6 +46,7 @@ public class AB_BlackBox {
 			return message;
 		}
 	}
+
 	//run alpha beta pruning on minmax tree of specified depth
 	public Move recompute(final Board b,int depth){
 		if(depth<=0){
@@ -88,6 +89,7 @@ public class AB_BlackBox {
 		}
 		return bestMove;
 	}
+
 	private float abMax(final Board b, int depthLeft, float alpha, float beta){
 
 		if(depthLeft==0 || b.checkWin(thisPlayer) || b.checkWin(otherPlayer)){
@@ -108,6 +110,7 @@ public class AB_BlackBox {
 		}
 		return nodeValue;
 	}
+
 	private float abMin(final Board b, int depthLeft, float alpha, float beta){
 		
 		if(depthLeft==0 || b.checkWin(thisPlayer) || b.checkWin(otherPlayer)){
@@ -128,6 +131,7 @@ public class AB_BlackBox {
 		}
 		return nodeValue;
 	}
+
 	private static int flipTurn(int turn){
 		if(turn==1)return 2;
 		else return 1;

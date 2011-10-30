@@ -3,6 +3,8 @@ import java.util.HashMap;
 import java.util.HashSet;
 
 public class AStarBlackBox {
+	EndGameBlackBox endGameBlackBox; // used to determine our target row/col
+	Cell targetCell;
 	int statesVisited = 0;
 	int turn, targetR, targetC, homeR, homeC, numMoveCutoff;
 	ArrayList<Move> winningMoves;
@@ -21,12 +23,13 @@ public class AStarBlackBox {
 	};
 
 	public AStarBlackBox(int playerTurn) {
+		endGameBlackBox = new EndGameBlackBox(playerTurn);
 		winningMoves = new ArrayList<Move>();
-
 		turn = playerTurn;
+
 		targetR = turn == 1 ? 0 : 16;
 		targetC = 12;
-
+		targetCell = new Cell(targetR, targetC);
 		homeR = turn == 1 ? 16 : 0;
 		homeC = 12;
 	}
@@ -56,6 +59,9 @@ public class AStarBlackBox {
 		while (!nodesToCheck.isEmpty()) {
 			statesVisited++;
 			StateNode chosenNode = getNodeWithLowestFScore(nodesToCheck);
+			targetCell = endGameBlackBox.getNewTargetCell(chosenNode.getState());
+			targetR = targetCell.getRow();
+			targetC = targetCell.getCol();
 			/*
 			System.err.println("A* Chosen Node:");
 		 	System.err.println("H cost: "	+ chosenNode.getH());
@@ -92,12 +98,19 @@ public class AStarBlackBox {
 
 					if (useNewG) {
 						neighbor.setG(newGScore);
-						neighbor.setH(getHeuristicCost(neighbor.getState()));
+						Move tempMove = neighbor.getState().getMove();
+						Cell tempCell = new Cell(tempMove.r2, tempMove.c2);
+						int hCost = 0;
+						if (!tempCell.equals(targetCell)) {
+							hCost = getHeuristicCost(neighbor.getState());
+						}
+						neighbor.setH(hCost);
 						neighbor.calculateAndSetF();
 					}
 				}
 			}
 		}
+		System.err.println("Null at aStar search. This should not happen.");
 		return null;
 	}
 
@@ -131,22 +144,32 @@ public class AStarBlackBox {
 		int[][] board = node.getState().reconstructBoardArray();
 		HashSet<StateNode> neighborNodes = new HashSet<StateNode>();
 
+		Cell targetCell = new Cell(targetR, targetC);
+		targetCell.setPriority(endGameBlackBox.getCellPriority(targetCell));
+
 		// go through all our marbles and get all possible locations we can move to.
 		// for each of these possible moves add its StateNode to the HashSet
 		// TODO: take into account moves that involve special pieces
 		for (int i = 0; i < 17; i++) {
 			for (int j = 0; j < 25; j++) {
 				if (board[i][j] == turn) {
-					HashSet<Integer> destinations = new HashSet<Integer>();
-					Util.getBoardLegalMoves(i, j, destinations, board);
-					for (Integer dest : destinations) {
-						int r = dest / 25;
-						int c = dest % 25;
-						Move m = new Move(0, 0, 0, i, j, r, c, -1, -1);
-						State neighborState = new State(m, node.getState());
-						StateNode neighborNode = new StateNode(neighborState);
-						neighborNode.setDepth(node.getDepth() + 1);
-						neighborNodes.add(neighborNode);
+					Cell occupiedCell = new Cell(i, j);
+					occupiedCell.setPriority(endGameBlackBox.getCellPriority(occupiedCell));
+					// If this marble is in a cell of lower priority to the target cell
+					// then consider it and get its neighbor states. Otherwise, it
+					// already occupies a higher priority cell so don't move it.
+					if (occupiedCell.getPriority() < targetCell.getPriority()) { 
+						HashSet<Integer> destinations = new HashSet<Integer>();
+						Util.getBoardLegalMoves(i, j, destinations, board);
+						for (Integer dest : destinations) {
+							int r = dest / 25;
+							int c = dest % 25;
+							Move m = new Move(0, 0, 0, i, j, r, c, -1, -1);
+							State neighborState = new State(m, node.getState());
+							StateNode neighborNode = new StateNode(neighborState);
+							neighborNode.setDepth(node.getDepth() + 1);
+							neighborNodes.add(neighborNode);
+						}
 					}
 				}
 			}

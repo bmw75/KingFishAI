@@ -17,55 +17,59 @@ import java.util.ArrayList;
 
 public class EndGameBlackBox {
 	ArrayList<Cell> targetCells;
-	int currentTarget;
+	Cell defaultTargetCell;
 
 	public EndGameBlackBox(int turn) {
-		currentTarget= 0;
 		targetCells = new ArrayList<Cell>();
 		if (turn == 1) {
-			targetCells.add(new Cell(13, 9));
-			targetCells.add(new Cell(13, 11));
-			targetCells.add(new Cell(13, 13));
-			targetCells.add(new Cell(13, 15));
-			targetCells.add(new Cell(14, 10));
-			targetCells.add(new Cell(14, 12));
-			targetCells.add(new Cell(14, 14));
-			targetCells.add(new Cell(15, 11));
-			targetCells.add(new Cell(15, 13));
-			targetCells.add(new Cell(16, 12));
+			targetCells.add(new Cell(3, 9, 4));
+			targetCells.add(new Cell(3, 11, 4));
+			targetCells.add(new Cell(3, 13, 4));
+			targetCells.add(new Cell(3, 15, 4));
+			targetCells.add(new Cell(1, 11, 3));
+			targetCells.add(new Cell(1, 13, 3));
+			targetCells.add(new Cell(0, 12, 2));
+			targetCells.add(new Cell(2, 10, 1));
+			targetCells.add(new Cell(2, 12, 1));
+			targetCells.add(new Cell(2, 14, 1));
+			defaultTargetCell = new Cell(0, 12, 1);
 		} else {
-			targetCells.add(new Cell(3, 9));
-			targetCells.add(new Cell(3, 11));
-			targetCells.add(new Cell(3, 13));
-			targetCells.add(new Cell(3, 15));
-			targetCells.add(new Cell(2, 10));
-			targetCells.add(new Cell(2, 12));
-			targetCells.add(new Cell(2, 14));
-			targetCells.add(new Cell(1, 11));
-			targetCells.add(new Cell(1, 13));
-			targetCells.add(new Cell(0, 12));
+			targetCells.add(new Cell(13, 10));
+			targetCells.add(new Cell(13, 11, 9));
+			targetCells.add(new Cell(13, 13, 8));
+			targetCells.add(new Cell(13, 15, 7));
+			targetCells.add(new Cell(15, 11, 6));
+			targetCells.add(new Cell(15, 13, 5));
+			targetCells.add(new Cell(16, 12, 4));
+			targetCells.add(new Cell(14, 10, 3));
+			targetCells.add(new Cell(14, 12, 2));
+			targetCells.add(new Cell(14, 14, 1));
+			defaultTargetCell = new Cell(16, 12, 1);
 		}
 	}
 
-	class Cell {
-		private int r, c;
-		private boolean occupied;
-
-		public Cell(int row, int col) {
-			r = row;
-			c = col;
-			occupied = false;
+	public int getCellPriority(Cell myCell) {
+		for (Cell c : targetCells) {
+			if (c.equals(myCell)) {
+				return c.getPriority();
+			}
 		}
+		return 0;
+	}
 
-		public int getRow() { return r; }
-		public int getCol() { return c; }
+	public Cell getNewTargetCell(State currentState) {
+		int[][] board = currentState.reconstructBoardArray();
+		// all the cells in targetCells are ordered according to their priority
+		// so just return the first one that is not occupied
+		for (Cell c : targetCells) {
+			if (!c.isOccupied(board)) {
+				return c;
+			}
+		}
+		return defaultTargetCell;
+	}
 
-		public void setRow(int row) {
-			r = row;
-		}
-		public void setCol(int col) {
-			c = col;
-		}
+	public boolean isTargetCell(Cell c) {
+		return targetCells.contains(c);
 	}
 }
-

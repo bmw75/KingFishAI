@@ -20,8 +20,8 @@
 
 - Opening/Closing moves
 	> Once we have passed the opponent and are racing to the finish just go straight with A* to get to the target area as fast as possible.
-	> Can there be optimal closing moves? Create an EndGameBlackBox to be used in conjunction with A*.
-		Actually there is. Don't go for the tip and then filling the rest of the target area in order.
+	> Fix the heuristic for your Closing move black box with A* search.
+	> [in progress] Work on optimal closing moves.
 		The target areas have 4 rows (let row k be the row with k pieces).
 			* Fill in row 4 first, then fill in row 2.
 			* This means that row row 1 and 3 can all be filled in by taking advantage of jumps.

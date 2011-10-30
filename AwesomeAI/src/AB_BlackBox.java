@@ -29,7 +29,7 @@ public class AB_BlackBox {
 
 	int thisPlayer;
 	int otherPlayer;
-	//hi!!
+
 	public AB_BlackBox(int whichPlayer){
 		thisPlayer=whichPlayer;
 		otherPlayer=3-thisPlayer;

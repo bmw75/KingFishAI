@@ -9,7 +9,7 @@ public class AwesomeAI extends Player {
 	public static int[][] initialBoard = new int[Const.BOARD_HEIGHT][Const.BOARD_WIDTH];
 	State currentState;
 	boolean opponentMadeAMove;
-	ArrayList<Move> aStarWinningMoveList;
+	ArrayList<Move> aStarWinningMoveList = new ArrayList<Move>();
   AStarBlackBox aStarBlackBox;
 
 	public AwesomeAI(Scanner scanner) {
@@ -23,44 +23,10 @@ public class AwesomeAI extends Player {
 			currentState = new State(opponentMove, currentState);
 		}
 		
-		Move m = null;
-		
 		//below is code to edit to make your own behavior\\
-		
-		//Nikita's alpha/beta
-		
-		AB_BlackBox abbox=new AB_BlackBox(getMyturn());
-		AB_BlackBox.Message output=abbox.gimmeAMove(getBoard(), 5);
-		if(output==AB_BlackBox.Message.NEED_TO_RECOMPUTE){
-			System.err.println("oh no, ab search not finding a move. sending null move");
-		}else{
-			m=output.getMove();
-		}
-		
-		
-		/*
-		//Pablo's A*
+		//Move m = getAlphaBetaMove();
+		Move m = getAStarMove();
 
-		if (!aStarWinningMoveList.isEmpty()) {
-			m = aStarWinningMoveList.remove(0);
-		}
-
-		if (m == null) {
-			System.err.println("Empty move list happened. Calculating new sequence.");
-			aStarWinningMoveList = aStarBlackBox.aStarSearch(currentState);
-			m = aStarWinningMoveList.remove(0);
-		}
-  	if (!board.validateSimpleMove(m.r1,m.c1,m.r2,m.c2,m.r3,m.c3,getMyturn())) {
-			System.err.println("Invalid move happened. There were still " +
-					(aStarWinningMoveList.size()) + " moves left. Calculating new sequence.");
-			aStarWinningMoveList = aStarBlackBox.aStarSearch(currentState);
-			m = aStarWinningMoveList.remove(0);
-		}
-  	*/
-
-		//System.err.println("Is move valid? " + board.validateSimpleMove(m.r1,m.c1,m.r2,m.c2,m.r3,m.c3,getMyturn()));
-
-  	//////////////////////-------------------------------//////////////////////////
   	//standard end of think() method----always use the code below
 		// perform the move before sending it
 		board.move(m);
@@ -72,7 +38,44 @@ public class AwesomeAI extends Player {
 	
 		return m.r1+" "+m.c1+" "+m.r2+" "+m.c2 + " "+ m.r3+" "+ m.c3;
 	}
-	
+
+
+	//Nikita's alpha/beta
+	public Move getAlphaBetaMove() {
+		Move m = null;
+
+		AB_BlackBox abbox=new AB_BlackBox(getMyturn());
+		AB_BlackBox.Message output=abbox.gimmeAMove(getBoard(), 5);
+		if(output==AB_BlackBox.Message.NEED_TO_RECOMPUTE){
+			System.err.println("oh no, ab search not finding a move. sending null move");
+		}else{
+			m=output.getMove();
+		}
+		return m;
+	}
+
+	// Pablo's A*
+	public Move getAStarMove() {
+		Move m = null;
+		if (!aStarWinningMoveList.isEmpty()) {
+			m = aStarWinningMoveList.remove(0);
+		}
+
+		if (m == null) {
+			System.err.println("Empty move list happened. Calculating new sequence.");
+			aStarWinningMoveList = aStarBlackBox.aStarSearch(currentState);
+			m = aStarWinningMoveList.remove(0);
+		}
+		if (!board.validateSimpleMove(m.r1,m.c1,m.r2,m.c2,m.r3,m.c3,getMyturn())) {
+			System.err.println("Invalid move happened. There were still " +
+					(aStarWinningMoveList.size()) + " moves left. Calculating new sequence.");
+			aStarWinningMoveList = aStarBlackBox.aStarSearch(currentState);
+			m = aStarWinningMoveList.remove(0);
+		}
+		//System.err.println("Is move valid? " + board.validateSimpleMove(m.r1,m.c1,m.r2,m.c2,m.r3,m.c3,getMyturn()));
+		return m;
+	}
+
 	/*
 	 * Get the opponent's move by comparing the old board with the new board to see what happened.
 	 */
@@ -117,11 +120,10 @@ public class AwesomeAI extends Player {
 		Scanner sc = new Scanner(System.in);
 		createInitialBoardFile(sc);
 		AwesomeAI p = new AwesomeAI(sc);
-		
+
 		p.currentState = new State(null, null); // first state: no move, no parent
 		System.err.println("Init state");
 		Util.printBoard(p.getBoard());
-		Util.checkStateConsistency(p.currentState, p.getBoard());
 		for (int i = 0; i < Const.BOARD_HEIGHT; i++) {
 			for (int j = 0; j < Const.BOARD_WIDTH; j++) {
 				AwesomeAI.initialBoard[i][j] = p.getBoard().at(i, j);
@@ -131,7 +133,7 @@ public class AwesomeAI extends Player {
 		p.aStarBlackBox = new AStarBlackBox(p.getMyturn());
 		p.aStarBlackBox.setMoveCutoff(5);
 		p.aStarWinningMoveList = p.aStarBlackBox.aStarSearch(p.currentState);
-		
+
 		while (true) {
 			System.err.println("turn = "+turn+"   myturn = "+p.getMyturn());	
 			if (turn == p.getMyturn()){
@@ -149,7 +151,7 @@ public class AwesomeAI extends Player {
 				}
 			} else {
 				int res = p.getOpponentMove();
-				
+
 				if (res == -1)
 					System.err.println("The server is messed up");
 				else if (res == 1) {
