@@ -80,6 +80,63 @@ public class Util {
 			}
 		}
 	}
+	
+	static int UNKNOWN=0;
+	static int OPENING = 1;
+	static int INTERACTING = 2;
+	static int CLOSING = 3;
+	
+	/*
+	 * progress: return what stage of the game is happening
+	 * inputs: State state, int prevProg
+	 * 		state: current state of the game
+	 * 		prevProg: last known progress of game
+	 * outputs: int OPENING, INTERACTING, CLOSING
+	 * Notes: Once you enter into a new stage you can not go back to a younger stage
+	 * 		  If Unknown and Not Interacting -> defaults to OPENING,
+	 * 		  PrevProg should only == UNKNOWN first time called
+	 */
+	public static int progress(Board board, int prevProg){
+		if (prevProg == UNKNOWN){
+			if (interacting(board)) return INTERACTING; else return OPENING;
+		}
+		if (prevProg == OPENING)
+			if (interacting(board)) return INTERACTING; else return OPENING;
+		if (prevProg == INTERACTING)
+			if (!interacting(board)) return CLOSING; else return INTERACTING;
+		if (prevProg == CLOSING)
+			return CLOSING;
+		return prevProg; // If no decision can be made return prevProg
+						 // (other option is to simply return unknown, but prevProg should reduce computations)
+	}
+	
+	private static boolean interacting(Board board){
+		piece[] myPieces = getPieces(board,1);
+		//System.err.println(myPieces[5].r);
+		piece[] hisPieces = getPieces(board,2);
+		//System.err.println(hisPieces.length);
+		for (piece mine:myPieces){
+			for (piece his:hisPieces){
+				if (euclideanDistSq(mine.r,mine.c,his.r,his.c) < 9) return true;
+			}
+		}
+		
+		return false;
+	}
+	
+	private static piece[] getPieces(Board board, int player){
+		piece[] pieces = new piece[10]; 
+		int index = 0;
+		for (int i = 0; i < Const.BOARD_HEIGHT; i++) {
+			for (int j = 0; j < Const.BOARD_WIDTH; j++) {
+				if (board.at(i, j) == player){
+					pieces[index] = new piece(i,j);
+					index++;
+				}
+			}
+		}
+		return pieces;
+	}
 
 	/*
 	 * Other helpful functions

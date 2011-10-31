@@ -139,6 +139,7 @@ public class AwesomeAI extends Player {
 			if (turn == p.getMyturn()){
 				System.err.println("It is my turn and I am thinking");	
 				System.out.println(p.think());
+				System.err.println("Progress is: " + Util.progress(p.getBoard(),0));
 				int status = p.getStatus();
 				if(status<0){
 					System.err.println("I lost. Status: " + status);
