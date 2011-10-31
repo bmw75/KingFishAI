@@ -32,7 +32,7 @@ public class AwesomeAI extends Player {
 		board.move(m);
 		currentState = new State(m, currentState);
 		
-//		Util.checkStateConsistency(currentState, getBoard());
+		Util.checkStateConsistency(currentState, getBoard());
 
 		System.err.println("My move: " + m.r1+" "+m.c1+" "+m.r2+" "+m.c2 + " "+ m.r3+" "+ m.c3);
 	
@@ -106,7 +106,7 @@ public class AwesomeAI extends Player {
 			}
 		}
 
-		System.err.println("Opponent's move: "+r1+" "+c1+" "+r2+" "+c2+" "+r3+" "+c3);
+//		System.err.println("Opponent's move: "+r1+" "+c1+" "+r2+" "+c2+" "+r3+" "+c3);
 
 		return new Move(0, 0, 0, r1, c1, r2, c2, r3, c3);
 	}
@@ -117,9 +117,7 @@ public class AwesomeAI extends Player {
 
 	public static void main(String args[]){
 		int turn = 1;
-		Scanner sc = new Scanner(System.in);
-		createInitialBoardFile(sc);
-		AwesomeAI p = new AwesomeAI(sc);
+		AwesomeAI p = new AwesomeAI(new Scanner(System.in));
 
 		p.currentState = new State(null, null); // first state: no move, no parent
 		System.err.println("Init state");
@@ -139,7 +137,7 @@ public class AwesomeAI extends Player {
 			if (turn == p.getMyturn()){
 				System.err.println("It is my turn and I am thinking");	
 				System.out.println(p.think());
-				System.err.println("Progress is: " + Util.progress(p.getBoard(),0));
+				Util.printGameProgress(Util.progress(p.getBoard(), 0));
 				int status = p.getStatus();
 				if(status<0){
 					System.err.println("I lost. Status: " + status);
@@ -166,26 +164,6 @@ public class AwesomeAI extends Player {
 			}
 			System.err.println(p.getBoard().toString('*'));
 			turn = 3-turn;
-		}
-	}
-
-	// creates the file initboard.txt which we will use as our initial board
-	public static void createInitialBoardFile(Scanner sc) {
-		StringBuilder boardBuilder = new StringBuilder("");
-		System.in.mark(439);
-		for (int i = 0; i < 18; i++) {
-			boardBuilder.append(sc.nextLine());
-			boardBuilder.append("\n");
-		}
-
-		try {
-			System.in.reset();
-			sc.nextLine();
-			BufferedWriter out = new BufferedWriter(new FileWriter(Const.BOARD_FILE));
-			out.write(boardBuilder.toString());
-			out.close();
-		} catch (IOException e) {
-			System.err.println(e.toString());
 		}
 	}
 }

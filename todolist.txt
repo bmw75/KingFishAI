@@ -26,6 +26,12 @@
 			* Fill in row 4 first, then fill in row 2.
 			* This means that row row 1 and 3 can all be filled in by taking advantage of jumps.
 			* This requires about half the number of moves when compared to starting at row 1 and working down to row 4.
+		- This has shown really good performance in the empty board case, not so much in the obstacle-board. Known problems:
+			* Try to consider your target as an entire row, not a single cell. Our first target cell is the leftmost piece in the widest row,
+				this ends up skewing all our pieces to a side.
+			* Sometimes a target cell can be filled by more than once piece. One of them is a piece already inside the target area. Another piece may
+				be a piece outside of the target area. We don't want a piece already inside the target area to do a backward move to fill this target cell.
+				Ideally, we should want to move the piece that is outside of the target area. But our distance function rates them both equally.
 	> Use A* search for opening move sequence or look into a permanent set of "best opening sequence" moves.
 		+ done.
 

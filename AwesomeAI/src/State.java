@@ -39,17 +39,15 @@ public class State {
 	}
 
 	public boolean equalsBoard(Board b) {
-		Board myBoard = this.reconstructBoard();
-		int[][] board1 = new int[17][25];
-		int[][] board2 = new int[17][25];
-
-		for (int i = 0; i < 17; i++) {
-			for (int j = 0; j < 25; j++) {
-				board1[i][j] = myBoard.at(i, j);
-				board2[i][j] = b.at(i, j);
+		int[][] board = this.reconstructBoardArray();
+		for (int i = 0; i < Const.BOARD_HEIGHT; i++) {
+			for (int j = 0; j < Const.BOARD_WIDTH; j++) {
+				if (b.at(i, j) != board[i][j]) {
+					return false;
+				}
 			}
 		}
-		return Arrays.deepEquals(board1, board2);
+		return true;
 	}
 
 	/*
@@ -64,26 +62,6 @@ public class State {
 		} else {
 			int[][] b = this.parent.reconstructBoardArray();
 			Util.performMoveOnBoard(this.move, b);
-			return b;
-		}
-	}
-
-	/*
-	 * reconstructBoard will get the Board that the current
-	 * state represents. It goes from the current state
-	 * all the way to the initial state and reproduces all the moves
-	 * in order to generate the board.
-	 *
-	 * Avoid using this function - it is slow. It requires i/o to
-	 * read the initial board configuration from a file in order to
-	 * create the new Board class instance.
-	 */
-	public Board reconstructBoard() {
-		if (this.parent == null) {
-			return generateNewInitialBoard();
-		} else {
-			Board b = this.parent.reconstructBoard();
-			b.move(this.move);
 			return b;
 		}
 	}

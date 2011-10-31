@@ -98,11 +98,15 @@ public class AStarBlackBox {
 
 					if (useNewG) {
 						neighbor.setG(newGScore);
-						Move tempMove = neighbor.getState().getMove();
-						Cell tempCell = new Cell(tempMove.r2, tempMove.c2);
-						int hCost = 0;
-						if (!tempCell.equals(targetCell)) {
-							hCost = getHeuristicCost(neighbor.getState());
+						int hCost = getHeuristicCost(neighbor.getState());
+						if (Const.ASTAR_TEST_CELL_PRIORITIES) {
+							Move nextMove = neighbor.getState().getMove();
+							Cell nextCell = new Cell(nextMove.r2, nextMove.c2);
+							// hCost will be 0 if our move will lead us to a target cell
+							// this way it is encouraged that we take this move
+							if (nextCell.equals(targetCell)) {
+								hCost = 0;
+							}
 						}
 						neighbor.setH(hCost);
 						neighbor.calculateAndSetF();
@@ -158,7 +162,8 @@ public class AStarBlackBox {
 					// If this marble is in a cell of lower priority to the target cell
 					// then consider it and get its neighbor states. Otherwise, it
 					// already occupies a higher priority cell so don't move it.
-					if (occupiedCell.getPriority() < targetCell.getPriority()) { 
+					if (occupiedCell.getPriority() < targetCell.getPriority()
+							|| !Const.ASTAR_TEST_CELL_PRIORITIES) { 
 						HashSet<Integer> destinations = new HashSet<Integer>();
 						Util.getBoardLegalMoves(i, j, destinations, board);
 						for (Integer dest : destinations) {

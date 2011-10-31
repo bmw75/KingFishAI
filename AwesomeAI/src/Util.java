@@ -51,6 +51,7 @@ public class Util {
 			return Math.max(Math.abs(dr), Math.abs(ds));
 		}
 	}
+
 	public static void getBoardLegalMoves(int r, int c, HashSet<Integer> moves, int[][] board){
 		moves.clear();
 		/* Immediate moves */
@@ -80,12 +81,12 @@ public class Util {
 			}
 		}
 	}
-	
-	static int UNKNOWN=0;
-	static int OPENING = 1;
-	static int INTERACTING = 2;
-	static int CLOSING = 3;
-	
+
+	static final int UNKNOWN=0;
+	static final int OPENING = 1;
+	static final int INTERACTING = 2;
+	static final int CLOSING = 3;
+
 	/*
 	 * progress: return what stage of the game is happening
 	 * inputs: State state, int prevProg
@@ -109,14 +110,14 @@ public class Util {
 		return prevProg; // If no decision can be made return prevProg
 						 // (other option is to simply return unknown, but prevProg should reduce computations)
 	}
-	
+
 	private static boolean interacting(Board board){
-		piece[] myPieces = getPieces(board,1);
+		Piece[] myPieces = getPieces(board,1);
 		//System.err.println(myPieces[5].r);
-		piece[] hisPieces = getPieces(board,2);
+		Piece[] hisPieces = getPieces(board,2);
 		//System.err.println(hisPieces.length);
-		for (piece mine:myPieces){
-			for (piece his:hisPieces){
+		for (Piece mine:myPieces){
+			for (Piece his:hisPieces){
 				if (euclideanDistSq(mine.r,mine.c,his.r,his.c) < 9) return true;
 			}
 		}
@@ -124,13 +125,13 @@ public class Util {
 		return false;
 	}
 	
-	private static piece[] getPieces(Board board, int player){
-		piece[] pieces = new piece[10]; 
+	private static Piece[] getPieces(Board board, int player){
+		Piece[] pieces = new Piece[10]; 
 		int index = 0;
 		for (int i = 0; i < Const.BOARD_HEIGHT; i++) {
 			for (int j = 0; j < Const.BOARD_WIDTH; j++) {
 				if (board.at(i, j) == player){
-					pieces[index] = new piece(i,j);
+					pieces[index] = new Piece(i,j);
 					index++;
 				}
 			}
@@ -147,25 +148,30 @@ public class Util {
 		else
 			return 1;
 	}
+
 	/*
 	 * Helpful print functions for great justice.
 	 */
-	public static void printState(State state) {
-		printBoard(state.reconstructBoard());
+	public static void printGameProgress(int progress) {
+		System.err.print("Progress is: ");
+		switch (progress) {
+			case UNKNOWN:
+				System.err.print("Unknown\n");
+				break;
+			case OPENING:
+				System.err.print("Opening\n");
+				break;
+			case INTERACTING:
+				System.err.print("Interacting\n");
+				break;
+			case CLOSING:
+				System.err.print("Closing\n");
+				break;
+		}
 	}
 
 	public static void printBoard(Board board) {
 		System.err.println(board.toString('0'));
-	}
-
-	public static void printStateConsistency(State state, Board board) {
-		System.err.println("\n************************************");
-		checkStateConsistency(state, board);
-		System.err.println("Current board:");
-		printBoard(board);
-		System.err.println("Current state representation:");
-		printBoard(state.reconstructBoard());
-		System.err.println("************************************\n");
 	}
 
 	// Checks if the given state is a correct representation of the given board

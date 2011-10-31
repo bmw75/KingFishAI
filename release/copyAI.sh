@@ -5,7 +5,7 @@ cp ../AwesomeAI/src/State.java .
 cp ../AwesomeAI/src/Cell.java .
 cp ../AwesomeAI/src/Board.java .
 cp ../AwesomeAI/src/Const.java .
-cp ../AwesomeAI/src/piece.java .
+cp ../AwesomeAI/src/Piece.java .
 cp ../AwesomeAI/src/Util.java .
 
 cp ../AwesomeAI/src/AB_BlackBox.java .
