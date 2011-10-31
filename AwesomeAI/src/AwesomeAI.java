@@ -6,17 +6,21 @@ import java.util.Scanner;
 import java.util.ArrayList;
 
 public class AwesomeAI extends Player {
+	
 	State currentState;
 	boolean opponentMadeAMove;
 	ArrayList<Move> aStarWinningMoveList;
-  AStarBlackBox aStarBlackBox;
+	AStarBlackBox aStarBlackBox;
+	AB_BlackBox ABSearch;
 	
 	public AwesomeAI(Scanner scanner) {
 		super(scanner);
+		ABSearch=new AB_BlackBox(getMyturn());
 	}
 
 	@Override
 	public String think() {
+		System.err.println("Awesome AI: ");
 		if (opponentMadeAMove) { // if we are the first move then this will be false at first
 			Move opponentMove = getOpponentsMove(currentState.reconstructBoard(), getBoard());
 			currentState = new State(opponentMove, currentState);
@@ -26,19 +30,16 @@ public class AwesomeAI extends Player {
 		
 		//below is code to edit to make your own behavior\\
 		
-		
 		//Nikita's alpha/beta
-		
-		AB_BlackBox abbox=new AB_BlackBox(getMyturn());
-		AB_BlackBox.Message output=abbox.gimmeAMove(getBoard(), 5);
+		/*
+		AB_BlackBox.Message output=ABSearch.gimmeAMove(getBoard(), 4);
 		if(output==AB_BlackBox.Message.NEED_TO_RECOMPUTE){
 			System.err.println("oh no, ab search not finding a move. sending null move");
 		}else{
 			m=output.getMove();
 		}
 		
-		
-		/*
+		*/
 		//Pablo's A*
 
 		if (!aStarWinningMoveList.isEmpty()) {
@@ -55,8 +56,8 @@ public class AwesomeAI extends Player {
 			aStarWinningMoveList = aStarBlackBox.aStarSearch(currentState);
 			m = aStarWinningMoveList.remove(0);
 		}
-  		*/
-
+  		
+		
 		//System.err.println("Is move valid? " + board.validateSimpleMove(m.r1,m.c1,m.r2,m.c2,m.r3,m.c3,getMyturn()));
 
   		//////////////////////-------------------------------//////////////////////////
@@ -64,6 +65,10 @@ public class AwesomeAI extends Player {
 		// perform the move before sending it
 		board.move(m);
 		currentState = new State(m, currentState);
+		if(m==null){
+			System.out.println("holly shit!");
+			
+		}
 		
 		Util.checkStateConsistency(currentState, getBoard());
 
