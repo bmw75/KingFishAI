@@ -11,5 +11,6 @@ cp ../AwesomeAI/src/Util.java .
 cp ../AwesomeAI/src/AB_BlackBox.java .
 cp ../AwesomeAI/src/AStarBlackBox.java .
 cp ../AwesomeAI/src/EndGameBlackBox.java .
+cp ../AwesomeAI/src/AwesomeAI2.java .
 
 echo "Copy complete, dawg."

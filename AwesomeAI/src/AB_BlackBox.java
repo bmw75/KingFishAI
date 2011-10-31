@@ -139,7 +139,7 @@ public class AB_BlackBox {
 	
 	// We go through all our marbles and get all possible locations we can move to.
 	// TODO: take into account moves that involve special pieces
-	public static List<Move> getMoveSet(Board board) {
+	private static List<Move> getMoveSet(Board board) {
 		int turn=board.getTurn();
 		List<Move> moveSet = new LinkedList<Move>();
 		for (int i = 0; i < 17; i++) {
@@ -160,37 +160,80 @@ public class AB_BlackBox {
 	}
 	
 	//higher utility is better
-	public static int utilityOfState(Board board, int turn) {
-		int targetR = -1;
-		int targetC = -1;
-		int oppR = -1;
-		int oppC = -1;
+	private static float utilityOfState(Board board, int turn) {
+		int middleR;
+		int middleC;
+		int oppMiddleR;
+		int oppMiddleC;
+		
 		if (turn == 1) {
-			targetR = 0;
-			targetC = 12;
-			oppR = 16;
-			oppC = 12;
+			middleR = 2;
+			middleC = 12;
+			oppMiddleR = 14;
+			oppMiddleC = 12;
 		} else {
-			targetR = 16;
-			targetC = 12;
-			oppR = 0;
-			oppC = 12;
+			middleR = 14;
+			middleC = 12;
+			oppMiddleR = 2;
+			oppMiddleC = 12;
 		}
-		int otherPlayer=flipTurn(turn);
 
-		int utility = 0;
+		float utility = 0;
 		for (int i = 0; i < 17; i++) {
 			for (int j = 0; j < 25; j++) {
-				if (board.at(i, j) == turn) {
-					utility -= Math.abs(i-targetR);
-				}else if(board.at(i,j)==otherPlayer){
-					utility += Math.abs(i-oppR);
+				int at=board.at(i, j);
+				//count only pieces belonging to the players
+				if(at==1 || at==2){
+					
+					int dx,dy;
+					if(at==turn){
+						dy=(middleR-i);
+						dx=(middleC-j);
+					}else{
+						dy=(oppMiddleR-i);
+						dx=(oppMiddleC-j);
+					}
+					//change utility function based on where we are
+					//if we're in the goal space, try to go for the center
+					//where score is 0 at the center of triangle
+					//1 on the hexagon around
+					//and 2 at the corners
+					float utilToAdd;
+					//are we in the target triangle?
+					if(Math.abs(dy)<=1){
+						//yes
+						//weigh distance laterally and sideways as well
+						//use hexagonal grid distance
+						//abs(dx)==2 means lateral pieces
+						if(dx==0 && dy==0){
+							utilToAdd=0;
+						}else if(Math.abs(dx)<=2 && dy!=0){
+							utilToAdd=-1;
+						}else{
+							utilToAdd=-3;
+						}
+						if(at!=turn){
+							utilToAdd=-utilToAdd;
+						}
+					}else{
+						//we're not in the winning corner
+						//prioritize the score to make it sort first by y distance
+						utilToAdd=(-(Math.abs(dy)*13+Math.abs(dx)));
+						if(at!=turn){
+							utilToAdd=-utilToAdd;
+						}
+					}
+					//update utility
+					utility+=utilToAdd;
 				}
 			}
 		}
 		return utility;
 	}
 	
+	
+	
+	//Below is ancient code left in the depths of a black box for backup.
 	///hacking below
 	////////////////////////////////////
 	private static class HashableMove extends Move{

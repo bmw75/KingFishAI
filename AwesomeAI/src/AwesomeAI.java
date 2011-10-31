@@ -11,13 +11,16 @@ public class AwesomeAI extends Player {
 	boolean opponentMadeAMove;
 	ArrayList<Move> aStarWinningMoveList = new ArrayList<Move>();
   AStarBlackBox aStarBlackBox;
-
+	AB_BlackBox ABSearch;
+	
 	public AwesomeAI(Scanner scanner) {
 		super(scanner);
+		ABSearch=new AB_BlackBox(getMyturn());
 	}
 
 	@Override
 	public String think() {
+		System.err.println("Awesome AI: ");
 		if (opponentMadeAMove) { // if we are the first move then this will be false at first
 			Move opponentMove = getOpponentsMove(currentState.reconstructBoardArray(), Util.getArrayFromBoard(getBoard()));
 			currentState = new State(opponentMove, currentState);
@@ -32,20 +35,20 @@ public class AwesomeAI extends Player {
 		board.move(m);
 		currentState = new State(m, currentState);
 		
+		if(m==null){
+			System.out.println("holy shit!");
+		}
 		Util.checkStateConsistency(currentState, getBoard());
-
 		System.err.println("My move: " + m.r1+" "+m.c1+" "+m.r2+" "+m.c2 + " "+ m.r3+" "+ m.c3);
-	
 		return m.r1+" "+m.c1+" "+m.r2+" "+m.c2 + " "+ m.r3+" "+ m.c3;
 	}
-
 
 	//Nikita's alpha/beta
 	public Move getAlphaBetaMove() {
 		Move m = null;
 
 		AB_BlackBox abbox=new AB_BlackBox(getMyturn());
-		AB_BlackBox.Message output=abbox.gimmeAMove(getBoard(), 5);
+		AB_BlackBox.Message output=ABSearch.gimmeAMove(getBoard(), 4);
 		if(output==AB_BlackBox.Message.NEED_TO_RECOMPUTE){
 			System.err.println("oh no, ab search not finding a move. sending null move");
 		}else{
@@ -53,7 +56,7 @@ public class AwesomeAI extends Player {
 		}
 		return m;
 	}
-
+		
 	// Pablo's A*
 	public Move getAStarMove() {
 		Move m = null;

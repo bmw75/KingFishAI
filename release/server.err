@@ -1,8 +1,17 @@
 Allotted Time - Player 1: 600000 Player 2: 600000
 Player 1
+<<<<<<< HEAD
 596788 42
 Exit value = 0
 Player 2
 599928 42
 Exit value = 0
 1
+=======
+582461 42
+Exit value = 0
+Player 2
+599978 42
+Exit value = 143
+2
+>>>>>>> 3faf8b436a63851fd1767799cb65e258ceb7350e

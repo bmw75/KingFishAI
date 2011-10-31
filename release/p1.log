@@ -21,9 +21,14 @@ Init state
 Number of states visited: 6
 turn = 1   myturn = 1
 It is my turn and I am thinking
+Awesome AI: 
 Is state consistent? true
+<<<<<<< HEAD
 My move: 14 10 12 12 -1 -1
 Progress is: Opening
+=======
+My move: 14 14 12 12 -1 -1
+>>>>>>> 3faf8b436a63851fd1767799cb65e258ceb7350e
             2            
            2 2           
           2 2 2          
@@ -38,7 +43,11 @@ Progress is: Opening
  * * * * * * * * * * * * 
 * * * * * * 1 * * * * * *
          1 1 1 1         
+<<<<<<< HEAD
           * 1 1          
+=======
+          1 1 *          
+>>>>>>> 3faf8b436a63851fd1767799cb65e258ceb7350e
            1 1           
             1            
 600000 600000 2 2 2
@@ -51,30 +60,47 @@ OK lemme think...
          2 2 2 2         
 * * * * * 2 * * * * * * *
  * * * * * * * * * * * * 
+<<<<<<< HEAD
   * * * * * * * * * * *  
    * * * * * * * * * *   
+=======
+  3 3 * * 3 3 * * * * *  
+   3 3 * * 3 3 3 * * *   
+>>>>>>> 3faf8b436a63851fd1767799cb65e258ceb7350e
     * * * * * * * * *    
    * * * * * * * * * *   
   * * * * * * * * * * *  
  * * * * * * * * * * * * 
 * * * * * * 1 * * * * * *
          1 1 1 1         
+<<<<<<< HEAD
           * 1 1          
+=======
+          1 1 *          
+>>>>>>> 3faf8b436a63851fd1767799cb65e258ceb7350e
            1 1           
             1            
-600000 600000 2 2 1
+600000 600000 2 1 1
 
 turn = 1   myturn = 1
 It is my turn and I am thinking
+<<<<<<< HEAD
 Is state consistent? true
 My move: 16 12 12 8 -1 -1
 Progress is: Opening
+=======
+Awesome AI: 
+Opponent's move: 2 14 4 12 7 15
+Is state consistent? true
+My move: 16 12 12 16 -1 -1
+>>>>>>> 3faf8b436a63851fd1767799cb65e258ceb7350e
             2            
            2 2           
           2 * 2          
          2 2 2 2         
 * * * * * 2 * * * * * * *
  * * * * * * * * * * * * 
+<<<<<<< HEAD
   * * * * * * * * * * *  
    * * * * * * * * * *   
     * * * * * * * * *    
@@ -87,11 +113,26 @@ Progress is: Opening
            1 1           
             *            
 600000 600000 2 2 2
+=======
+  3 3 * * 3 3 * * * * *  
+   3 3 * * 3 3 3 * * *   
+    * * * * * * * * *    
+   * * * * 3 3 * * 3 3   
+  * * * * 3 3 * * 3 3 3  
+ * * * * * * * * * * * * 
+* * * * * * 1 * 1 * * * *
+         1 1 1 1         
+          1 1 *          
+           1 1           
+            *            
+600000 600000 2 1 2
+>>>>>>> 3faf8b436a63851fd1767799cb65e258ceb7350e
 
 turn = 2   myturn = 1
 OK lemme think...
             2            
            2 2           
+<<<<<<< HEAD
           2 * 2          
          2 * 2 2         
 * * * * * 2 3 * * * * * *
@@ -105,12 +146,28 @@ OK lemme think...
 * * * * 1 * 1 * * * * * *
          1 1 1 1         
           * 1 1          
+=======
+          2 2 *          
+         2 2 * 2         
+* * * * * * 2 * * * * * *
+ * * * * * * * * * * * * 
+  3 3 * * 3 3 * * * * *  
+   3 3 * 2 3 3 3 * * *   
+    * * * * * * * * *    
+   * * * * 3 3 * * 3 3   
+  * * * * 3 3 * * 3 3 3  
+ * * * * * * * * * * * * 
+* * * * * * 1 * 1 * * * *
+         1 1 1 1         
+          1 1 *          
+>>>>>>> 3faf8b436a63851fd1767799cb65e258ceb7350e
            1 1           
             *            
 600000 600000 2 1 1
 
 turn = 1   myturn = 1
 It is my turn and I am thinking
+<<<<<<< HEAD
 Is state consistent? true
 My move: 13 13 11 11 -1 -1
 Progress is: Opening
@@ -129,6 +186,27 @@ Progress is: Opening
 * * * * 1 * 1 * * * * * *
          1 1 * 1         
           * 1 1          
+=======
+Awesome AI: 
+Opponent's move: 3 13 7 9 -1 -1
+Is state consistent? true
+My move: 13 13 9 9 -1 -1
+            2            
+           2 2           
+          2 2 *          
+         2 2 * 2         
+* * * * * * 2 * * * * * *
+ * * * * * * * * * * * * 
+  3 3 * * 3 3 * * * * *  
+   3 3 * 2 3 3 3 * * *   
+    * * * * * * * * *    
+   * * * 1 3 3 * * 3 3   
+  * * * * 3 3 * * 3 3 3  
+ * * * * * * * * * * * * 
+* * * * * * 1 * 1 * * * *
+         1 1 * 1         
+          1 1 *          
+>>>>>>> 3faf8b436a63851fd1767799cb65e258ceb7350e
            1 1           
             *            
 600000 600000 2 1 2
@@ -136,6 +214,7 @@ Progress is: Opening
 turn = 2   myturn = 1
 OK lemme think...
             2            
+<<<<<<< HEAD
            2 2           
           * * 2          
          2 * 2 2         
@@ -269,10 +348,101 @@ Progress is: Interacting
            1 1           
             *            
 600000 600000 2 0 2
+=======
+           * 2           
+          2 2 *          
+         2 2 * 2         
+* * * * * * 2 * * * * * *
+ * * * * * 2 * * * * * * 
+  3 3 * * 3 3 * * * * *  
+   3 3 * 2 3 3 3 * * *   
+    * * * * * * * * *    
+   * * * 1 3 3 * * 3 3   
+  * * * * 3 3 * * 3 3 3  
+ * * * * * * * * * * * * 
+* * * * * * 1 * 1 * * * *
+         1 1 * 1         
+          1 1 *          
+           1 1           
+            *            
+600000 600000 2 1 1
+
+turn = 1   myturn = 1
+It is my turn and I am thinking
+Awesome AI: 
+Opponent's move: 1 11 5 11 -1 -1
+Is state consistent? true
+My move: 15 11 11 11 -1 -1
+            2            
+           * 2           
+          2 2 *          
+         2 2 * 2         
+* * * * * * 2 * * * * * *
+ * * * * * 2 * * * * * * 
+  3 3 * * 3 3 * * * * *  
+   3 3 * 2 3 3 3 * * *   
+    * * * * * * * * *    
+   * * * 1 3 3 * * 3 3   
+  * * * * 3 3 * * 3 3 3  
+ * * * * * 1 * * * * * * 
+* * * * * * 1 * 1 * * * *
+         1 1 * 1         
+          1 1 *          
+           * 1           
+            *            
+600000 600000 2 1 2
 
 turn = 2   myturn = 1
 OK lemme think...
             *            
+           * 2           
+          2 2 *          
+         2 2 * 2         
+* * * * * * 2 * 2 * * * *
+ * * * * * 2 * * * * * * 
+  3 3 * * 3 3 * * * * *  
+   3 3 * 2 3 3 3 * * *   
+    * * * * * * * * *    
+   * * * 1 3 3 * * 3 3   
+  * * * * 3 3 * * 3 3 3  
+ * * * * * 1 * * * * * * 
+* * * * * * 1 * 1 * * * *
+         1 1 * 1         
+          1 1 *          
+           * 1           
+            *            
+600000 600000 2 1 1
+
+turn = 1   myturn = 1
+It is my turn and I am thinking
+Awesome AI: 
+Opponent's move: 0 12 4 16 -1 -1
+Is state consistent? true
+My move: 14 12 12 14 -1 -1
+            *            
+           * 2           
+          2 2 *          
+         2 2 * 2         
+* * * * * * 2 * 2 * * * *
+ * * * * * 2 * * * * * * 
+  3 3 * * 3 3 * * * * *  
+   3 3 * 2 3 3 3 * * *   
+    * * * * * * * * *    
+   * * * 1 3 3 * * 3 3   
+  * * * * 3 3 * * 3 3 3  
+ * * * * * 1 * * * * * * 
+* * * * * * 1 1 1 * * * *
+         1 1 * 1         
+          1 * *          
+           * 1           
+            *            
+600000 600000 2 1 2
+>>>>>>> 3faf8b436a63851fd1767799cb65e258ceb7350e
+
+turn = 2   myturn = 1
+OK lemme think...
+            *            
+<<<<<<< HEAD
            2 2           
           * * 2          
          2 * * 2         
@@ -288,11 +458,29 @@ OK lemme think...
          1 * * 1         
           * * 1          
            1 1           
+=======
+           * 2           
+          2 2 *          
+         2 * * 2         
+* * * * * * 2 * 2 * * * *
+ * * * * 2 2 * * * * * * 
+  3 3 * * 3 3 * * * * *  
+   3 3 * 2 3 3 3 * * *   
+    * * * * * 3 * * *    
+   * * * 1 3 3 * * 3 3   
+  * * * * 3 3 * * 3 3 3  
+ * * * * * 1 * * * * * * 
+* * * * * * 1 1 1 * * * *
+         1 1 * 1         
+          1 * *          
+           * 1           
+>>>>>>> 3faf8b436a63851fd1767799cb65e258ceb7350e
             *            
 600000 600000 2 0 1
 
 turn = 1   myturn = 1
 It is my turn and I am thinking
+<<<<<<< HEAD
 Is state consistent? true
 My move: 15 13 14 12 -1 -1
 Progress is: Interacting
@@ -312,12 +500,36 @@ Progress is: Interacting
          1 * * 1         
           * 1 1          
            1 *           
+=======
+Awesome AI: 
+Opponent's move: 3 11 5 9 8 14
+Empty move list happened. Calculating new sequence.
+Is state consistent? true
+My move: 14 10 12 8 -1 -1
+            *            
+           * 2           
+          2 2 *          
+         2 * * 2         
+* * * * * * 2 * 2 * * * *
+ * * * * 2 2 * * * * * * 
+  3 3 * * 3 3 * * * * *  
+   3 3 * 2 3 3 3 * * *   
+    * * * * * 3 * * *    
+   * * * 1 3 3 * * 3 3   
+  * * * * 3 3 * * 3 3 3  
+ * * * * * 1 * * * * * * 
+* * * * 1 * 1 1 1 * * * *
+         1 1 * 1         
+          * * *          
+           * 1           
+>>>>>>> 3faf8b436a63851fd1767799cb65e258ceb7350e
             *            
 600000 600000 2 0 2
 
 turn = 2   myturn = 1
 OK lemme think...
             *            
+<<<<<<< HEAD
            2 2           
           * * 2          
          2 * * 2         
@@ -333,11 +545,29 @@ OK lemme think...
          1 * * 1         
           * 1 1          
            1 *           
+=======
+           * *           
+          2 2 *          
+         2 * * 2         
+* * * * * * 2 * 2 * * * *
+ * * * * 2 2 2 * * * * * 
+  3 3 * * 3 3 * * * * *  
+   3 3 * 2 3 3 3 * * *   
+    * * * * * 3 * * *    
+   * * * 1 3 3 * * 3 3   
+  * * * * 3 3 * * 3 3 3  
+ * * * * * 1 * * * * * * 
+* * * * 1 * 1 1 1 * * * *
+         1 1 * 1         
+          * * *          
+           * 1           
+>>>>>>> 3faf8b436a63851fd1767799cb65e258ceb7350e
             *            
 600000 600000 2 0 1
 
 turn = 1   myturn = 1
 It is my turn and I am thinking
+<<<<<<< HEAD
 Is state consistent? true
 My move: 15 11 9 13 -1 -1
 Progress is: Interacting
@@ -357,12 +587,35 @@ Progress is: Interacting
          1 * * 1         
           * 1 1          
            * *           
+=======
+Awesome AI: 
+Opponent's move: 1 13 5 13 -1 -1
+Is state consistent? true
+My move: 13 11 11 13 -1 -1
+            *            
+           * *           
+          2 2 *          
+         2 * * 2         
+* * * * * * 2 * 2 * * * *
+ * * * * 2 2 2 * * * * * 
+  3 3 * * 3 3 * * * * *  
+   3 3 * 2 3 3 3 * * *   
+    * * * * * 3 * * *    
+   * * * 1 3 3 * * 3 3   
+  * * * * 3 3 * * 3 3 3  
+ * * * * * 1 1 * * * * * 
+* * * * 1 * 1 1 1 * * * *
+         1 * * 1         
+          * * *          
+           * 1           
+>>>>>>> 3faf8b436a63851fd1767799cb65e258ceb7350e
             *            
 600000 600000 2 0 2
 
 turn = 2   myturn = 1
 OK lemme think...
             *            
+<<<<<<< HEAD
            2 2           
           * * 2          
          2 * * 2         
@@ -378,11 +631,29 @@ OK lemme think...
          1 * * 1         
           * 1 1          
            * *           
+=======
+           * *           
+          2 2 *          
+         2 * * 2         
+* * * * * * * * 2 * * * *
+ * * * * 2 2 2 * * * * * 
+  3 3 * * 3 3 * * * * *  
+   3 3 * 2 3 3 3 * * *   
+    * * * * * 3 * * *    
+   * * * 1 3 3 * * 3 3   
+  * * * * 3 3 2 * 3 3 3  
+ * * * * * 1 1 * * * * * 
+* * * * 1 * 1 1 1 * * * *
+         1 * * 1         
+          * * *          
+           * 1           
+>>>>>>> 3faf8b436a63851fd1767799cb65e258ceb7350e
             *            
 600000 600000 2 0 1
 
 turn = 1   myturn = 1
 It is my turn and I am thinking
+<<<<<<< HEAD
 Is state consistent? true
 My move: 13 15 11 13 -1 -1
 Progress is: Interacting
@@ -402,12 +673,36 @@ Progress is: Interacting
          1 * * *         
           * 1 1          
            * *           
+=======
+Awesome AI: 
+Opponent's move: 4 12 10 14 -1 -1
+Invalid move happened. Calculating new sequence.
+Is state consistent? true
+My move: 13 15 11 17 -1 -1
+            *            
+           * *           
+          2 2 *          
+         2 * * 2         
+* * * * * * * * 2 * * * *
+ * * * * 2 2 2 * * * * * 
+  3 3 * * 3 3 * * * * *  
+   3 3 * 2 3 3 3 * * *   
+    * * * * * 3 * * *    
+   * * * 1 3 3 * * 3 3   
+  * * * * 3 3 2 * 3 3 3  
+ * * * * * 1 1 * 1 * * * 
+* * * * 1 * 1 1 1 * * * *
+         1 * * *         
+          * * *          
+           * 1           
+>>>>>>> 3faf8b436a63851fd1767799cb65e258ceb7350e
             *            
 600000 600000 2 0 2
 
 turn = 2   myturn = 1
 OK lemme think...
             *            
+<<<<<<< HEAD
            2 2           
           * * *          
          2 * * 2         
@@ -423,11 +718,29 @@ OK lemme think...
          1 * * *         
           * 1 1          
            * *           
+=======
+           * *           
+          2 2 *          
+         2 * * *         
+* * * * * * * * 2 * * * *
+ * * * * 2 2 2 * 2 * * * 
+  3 3 * * 3 3 * * * * *  
+   3 3 * 2 3 3 3 * * *   
+    * * * * * 3 * * *    
+   * * * 1 3 3 * * 3 3   
+  * * * * 3 3 2 * 3 3 3  
+ * * * * * 1 1 * 1 * * * 
+* * * * 1 * 1 1 1 * * * *
+         1 * * *         
+          * * *          
+           * 1           
+>>>>>>> 3faf8b436a63851fd1767799cb65e258ceb7350e
             *            
 600000 600000 2 0 1
 
 turn = 1   myturn = 1
 It is my turn and I am thinking
+<<<<<<< HEAD
 Invalid move happened. There were still 0 moves left. Calculating new sequence.
 Number of states visited: 6
 Is state consistent? true
@@ -449,12 +762,35 @@ Progress is: Interacting
          1 * 1 *         
           * 1 *          
            * *           
+=======
+Awesome AI: 
+Opponent's move: 3 15 5 17 -1 -1
+Is state consistent? true
+My move: 12 14 10 16 -1 -1
+            *            
+           * *           
+          2 2 *          
+         2 * * *         
+* * * * * * * * 2 * * * *
+ * * * * 2 2 2 * 2 * * * 
+  3 3 * * 3 3 * * * * *  
+   3 3 * 2 3 3 3 * * *   
+    * * * * * 3 * * *    
+   * * * 1 3 3 * * 3 3   
+  * * * * 3 3 2 1 3 3 3  
+ * * * * * 1 1 * 1 * * * 
+* * * * 1 * 1 * 1 * * * *
+         1 * * *         
+          * * *          
+           * 1           
+>>>>>>> 3faf8b436a63851fd1767799cb65e258ceb7350e
             *            
 600000 600000 2 0 2
 
 turn = 2   myturn = 1
 OK lemme think...
             *            
+<<<<<<< HEAD
            2 2           
           * * *          
          2 * * 2         
@@ -470,11 +806,29 @@ OK lemme think...
          1 * 1 *         
           * 1 *          
            * *           
+=======
+           * *           
+          2 2 *          
+         2 * * *         
+* * * * * * * * * * * * *
+ * * * * 2 2 2 * 2 * * * 
+  3 3 * * 3 3 * * 2 * *  
+   3 3 * 2 3 3 3 * * *   
+    * * * * * 3 * * *    
+   * * * 1 3 3 * * 3 3   
+  * * * * 3 3 2 1 3 3 3  
+ * * * * * 1 1 * 1 * * * 
+* * * * 1 * 1 * 1 * * * *
+         1 * * *         
+          * * *          
+           * 1           
+>>>>>>> 3faf8b436a63851fd1767799cb65e258ceb7350e
             *            
 600000 600000 2 0 1
 
 turn = 1   myturn = 1
 It is my turn and I am thinking
+<<<<<<< HEAD
 Is state consistent? true
 My move: 13 13 7 7 -1 -1
 Progress is: Interacting
@@ -539,12 +893,36 @@ Progress is: Interacting
          * * * *         
           * 1 *          
            * *           
+=======
+Awesome AI: 
+Opponent's move: 4 16 6 18 -1 -1
+Invalid move happened. Calculating new sequence.
+Is state consistent? false
+My move: 13 9 11 7 -1 -1
+            *            
+           * *           
+          2 2 *          
+         2 * * *         
+* * * * * * * * * * * * *
+ * * * * 2 2 2 * 2 * * * 
+  3 3 * * 3 3 * * 2 * *  
+   3 3 * 2 3 3 3 * * *   
+    * * * * * 3 * * *    
+   * * * 1 3 3 * * 3 3   
+  * * * * 3 3 2 1 3 3 3  
+ * * * 1 * 1 1 * 1 * * * 
+* * * * 1 * 1 * 1 * * * *
+         * * * *         
+          * * *          
+           * 1           
+>>>>>>> 3faf8b436a63851fd1767799cb65e258ceb7350e
             *            
 600000 600000 2 0 2
 
 turn = 2   myturn = 1
 OK lemme think...
             *            
+<<<<<<< HEAD
            2 2           
           * * *          
          2 * * 2         
@@ -605,17 +983,54 @@ OK lemme think...
          * 1 * *         
           * 2 *          
            * *           
+=======
+           * *           
+          2 2 *          
+         2 * * *         
+* * * * * * * * * * * * *
+ * * * * 2 2 2 * * * * * 
+  3 3 * * 3 3 * * 2 * *  
+   3 3 * 2 3 3 3 * 2 *   
+    * * * * * 3 * * *    
+   * * * 1 3 3 * * 3 3   
+  * * * * 3 3 2 1 3 3 3  
+ * * * 1 * 1 1 * 1 * * * 
+* * * * 1 * 1 * 1 * * * *
+         * * * *         
+          * * *          
+           * 1           
+>>>>>>> 3faf8b436a63851fd1767799cb65e258ceb7350e
             *            
 600000 600000 2 0 1
 
 turn = 1   myturn = 1
 It is my turn and I am thinking
+<<<<<<< HEAD
 Is state consistent? true
 My move: 11 7 9 9 -1 -1
 Progress is: Interacting
+=======
+Awesome AI: 
+Opponent's move: 5 17 7 19 10 22
+Is state consistent? false
+My move: 10 16 4 10 -1 -1
+>>>>>>> 3faf8b436a63851fd1767799cb65e258ceb7350e
             *            
-           2 2           
+           * *           
+          2 2 *          
+         2 * * *         
+* * * * * 1 * * * * * * *
+ * * * * 2 2 2 * * * * * 
+  3 3 * * 3 3 * * 2 * *  
+   3 3 * 2 3 3 3 * 2 *   
+    * * * * * 3 * * *    
+   * * * 1 3 3 * * 3 3   
+  * * * * 3 3 2 * 3 3 3  
+ * * * 1 * 1 1 * 1 * * * 
+* * * * 1 * 1 * 1 * * * *
+         * * * *         
           * * *          
+<<<<<<< HEAD
          2 * * 2         
 * * * * * * 3 * * * * * *
  * * * * 2 * * * * * * * 
@@ -629,14 +1044,30 @@ Progress is: Interacting
          * 1 * *         
           * 2 *          
            * *           
+=======
+           * 1           
+>>>>>>> 3faf8b436a63851fd1767799cb65e258ceb7350e
             *            
 600000 600000 2 0 2
 
 turn = 2   myturn = 1
 OK lemme think...
             *            
-           2 2           
+           * *           
+          * 2 *          
+         2 * * *         
+* * * * * 1 * * * * * * *
+ * * * * 2 2 2 * * * * * 
+  3 3 * * 3 3 * * 2 * *  
+   3 3 * 2 3 3 3 * 2 *   
+    * * * * 2 3 * * *    
+   * * * 1 3 3 * * 3 3   
+  * * * * 3 3 2 * 3 3 3  
+ * * * 1 * 1 1 * 1 * * * 
+* * * * 1 * 1 * 1 * * * *
+         * * * *         
           * * *          
+<<<<<<< HEAD
          2 * * 2         
 * * * * * * 3 * * * * * *
  * * * * 2 * * * * * * * 
@@ -650,11 +1081,15 @@ OK lemme think...
          * 1 * *         
           * 2 *          
            * *           
+=======
+           * 1           
+>>>>>>> 3faf8b436a63851fd1767799cb65e258ceb7350e
             *            
 600000 600000 2 0 1
 
 turn = 1   myturn = 1
 It is my turn and I am thinking
+<<<<<<< HEAD
 Empty move list happened. Calculating new sequence.
 Number of states visited: 8
 Is state consistent? true
@@ -2224,3 +2659,11 @@ Progress is: Interacting
 600000 600000 2 0 2
 
 I won
+=======
+Awesome AI: 
+Opponent's move: 2 10 8 12 10 20
+Invalid move happened. Calculating new sequence.
+Is state consistent? false
+My move: 12 12 2 10 -1 -1
+I lost. Status: -2
+>>>>>>> 3faf8b436a63851fd1767799cb65e258ceb7350e
