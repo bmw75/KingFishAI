@@ -34,15 +34,15 @@ public class EndGameBlackBox {
 			targetCells.add(new Cell(2, 14, 1));
 			defaultTargetCell = new Cell(0, 12, 1);
 		} else {
-			targetCells.add(new Cell(13, 10));
-			targetCells.add(new Cell(13, 11, 9));
-			targetCells.add(new Cell(13, 13, 8));
-			targetCells.add(new Cell(13, 15, 7));
-			targetCells.add(new Cell(15, 11, 6));
-			targetCells.add(new Cell(15, 13, 5));
-			targetCells.add(new Cell(16, 12, 4));
-			targetCells.add(new Cell(14, 10, 3));
-			targetCells.add(new Cell(14, 12, 2));
+			targetCells.add(new Cell(13, 4));
+			targetCells.add(new Cell(13, 11, 4));
+			targetCells.add(new Cell(13, 13, 4));
+			targetCells.add(new Cell(13, 15, 4));
+			targetCells.add(new Cell(15, 11, 3));
+			targetCells.add(new Cell(15, 13, 3));
+			targetCells.add(new Cell(16, 12, 2));
+			targetCells.add(new Cell(14, 10, 1));
+			targetCells.add(new Cell(14, 12, 1));
 			targetCells.add(new Cell(14, 14, 1));
 			defaultTargetCell = new Cell(16, 12, 1);
 		}
