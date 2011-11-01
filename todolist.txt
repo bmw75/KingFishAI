@@ -1,44 +1,17 @@
 - General
-	> Get a function that can determine how close we are to the opponent
-		(i.e. are we close enough to interact with them? Have we already passed them and are now racing to the finish?)
 	> Write a function that checks if an opponent's piece is trapped by our pieces in their home area.
 		If this is the case then we can start ignoring one of our own pieces and use it as a defensive piece (because we now
 		require one less piece in their home area in order to win).
-	> Is there any optimal placement of special marble?
-	> Fix the distance function to prioritize straight movement up to target area, instead of going diagonally to the sides.
-		+ done. using euclidean distance since it prioritizes straight vertical movement. Seems to work fine.
+	> Work on special marble black box
 
 - A* Search
-	> Make A* take into account placing special marbles.
-	> Get a proper g cost working (cost from goal) in order to get a better A*.
-		+ done. using a count of total number of moves up to the state as its g cost.
-			Taking sum of distances from home as g cost lead to a worse A*. It made all pieces
-			move together as a pack, which made us slower because we could no longer take advantage of jumps.
+	> Make A* take into account placing special marbles by using the special marble black box.
 	> Currently our A* only looks 5 moves ahead. Test with different amounts?
 			If it's too big its a problem, because A* doesn't take into account opponent movement.
 			E.g. looking ahead 10 moves was actually worse than just looking ahead 5 moves with A*.
 
-- Opening/Closing moves
-	> Once we have passed the opponent and are racing to the finish just go straight with A* to get to the target area as fast as possible.
-	> Fix the heuristic for your Closing move black box with A* search.
-	> [in progress] Work on optimal closing moves.
-		The target areas have 4 rows (let row k be the row with k pieces).
-			* Fill in row 4 first, then fill in row 2.
-			* This means that row row 1 and 3 can all be filled in by taking advantage of jumps.
-			* This requires about half the number of moves when compared to starting at row 1 and working down to row 4.
-		- This has shown really good performance in the empty board case, not so much in the obstacle-board. Known problems:
-			* Try to consider your target as an entire row, not a single cell. Our first target cell is the leftmost piece in the widest row,
-				this ends up skewing all our pieces to a side.
-			* Sometimes a target cell can be filled by more than once piece. One of them is a piece already inside the target area. Another piece may
-				be a piece outside of the target area. We don't want a piece already inside the target area to do a backward move to fill this target cell.
-				Ideally, we should want to move the piece that is outside of the target area. But our distance function rates them both equally.
-	> Use A* search for opening move sequence or look into a permanent set of "best opening sequence" moves.
-		+ done.
-
 - Alpha-Beta Search
-	> Get a working AB Search that looks a few moves ahead (probably 3? Test with different numbers).
-	> Make sure it takes into account placing special marble.
-	> Use AB search only once we are close enough to the opponent such that opponent interaction becomes important.
+	> Make AB search work with the special marble black box.
 
 - Classification
 	> Is there any way in which we can classify the opponent?

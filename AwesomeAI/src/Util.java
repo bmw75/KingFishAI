@@ -82,40 +82,34 @@ public class Util {
 		}
 	}
 
-	static final int UNKNOWN=0;
-	static final int OPENING = 1;
-	static final int INTERACTING = 2;
-	static final int CLOSING = 3;
 
 	/*
 	 * progress: return what stage of the game is happening
 	 * inputs: State state, int prevProg
 	 * 		state: current state of the game
 	 * 		prevProg: last known progress of game
-	 * outputs: int OPENING, INTERACTING, CLOSING
+	 * outputs: int Const.OPENING, Const.INTERACTING, Const.CLOSING
 	 * Notes: Once you enter into a new stage you can not go back to a younger stage
-	 * 		  If Unknown and Not Interacting -> defaults to OPENING,
-	 * 		  PrevProg should only == UNKNOWN first time called
+	 * 		  If Unknown and Not Interacting -> defaults to Const.OPENING,
+	 * 		  PrevProg should only == Const.UNKNOWN first time called
 	 */
 	public static int progress(Board board, int prevProg){
-		if (prevProg == UNKNOWN){
-			if (interacting(board)) return INTERACTING; else return OPENING;
+		if (prevProg == Const.UNKNOWN){
+			if (interacting(board)) return Const.INTERACTING; else return Const.OPENING;
 		}
-		if (prevProg == OPENING)
-			if (interacting(board)) return INTERACTING; else return OPENING;
-		if (prevProg == INTERACTING)
-			if (!interacting(board)) return CLOSING; else return INTERACTING;
-		if (prevProg == CLOSING)
-			return CLOSING;
+		if (prevProg == Const.OPENING)
+			if (interacting(board)) return Const.INTERACTING; else return Const.OPENING;
+		if (prevProg == Const.INTERACTING)
+			if (!interacting(board)) return Const.CLOSING; else return Const.INTERACTING;
+		if (prevProg == Const.CLOSING)
+			return Const.CLOSING;
 		return prevProg; // If no decision can be made return prevProg
 						 // (other option is to simply return unknown, but prevProg should reduce computations)
 	}
 
 	private static boolean interacting(Board board){
 		Piece[] myPieces = getPieces(board,1);
-		//System.err.println(myPieces[5].r);
 		Piece[] hisPieces = getPieces(board,2);
-		//System.err.println(hisPieces.length);
 		for (Piece mine:myPieces){
 			for (Piece his:hisPieces){
 				if (euclideanDistSq(mine.r,mine.c,his.r,his.c) < 9) return true;
@@ -155,16 +149,16 @@ public class Util {
 	public static void printGameProgress(int progress) {
 		System.err.print("Progress is: ");
 		switch (progress) {
-			case UNKNOWN:
+			case Const.UNKNOWN:
 				System.err.print("Unknown\n");
 				break;
-			case OPENING:
+			case Const.OPENING:
 				System.err.print("Opening\n");
 				break;
-			case INTERACTING:
+			case Const.INTERACTING:
 				System.err.print("Interacting\n");
 				break;
-			case CLOSING:
+			case Const.CLOSING:
 				System.err.print("Closing\n");
 				break;
 		}

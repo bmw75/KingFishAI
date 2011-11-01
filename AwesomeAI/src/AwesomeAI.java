@@ -1,6 +1,3 @@
-import java.io.BufferedWriter;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.util.HashSet;
 import java.util.Scanner;
 import java.util.ArrayList;
@@ -9,34 +6,46 @@ public class AwesomeAI extends Player {
 	public static int[][] initialBoard = new int[Const.BOARD_HEIGHT][Const.BOARD_WIDTH];
 	State currentState;
 	boolean opponentMadeAMove;
+	int gameProgress = Const.UNKNOWN;
 	ArrayList<Move> aStarWinningMoveList = new ArrayList<Move>();
   AStarBlackBox aStarBlackBox;
 	AB_BlackBox ABSearch;
 	
 	public AwesomeAI(Scanner scanner) {
 		super(scanner);
-		ABSearch=new AB_BlackBox(getMyturn());
+		ABSearch = new AB_BlackBox(getMyturn());
+		aStarBlackBox = new AStarBlackBox(getMyturn());
+		aStarBlackBox.setMoveCutoff(5);
 	}
 
 	@Override
 	public String think() {
-		System.err.println("Awesome AI: ");
 		if (opponentMadeAMove) { // if we are the first move then this will be false at first
 			Move opponentMove = getOpponentsMove(currentState.reconstructBoardArray(), Util.getArrayFromBoard(getBoard()));
 			currentState = new State(opponentMove, currentState);
 		}
-		
+
+		gameProgress = Util.progress(getBoard(), gameProgress);
+		Util.printGameProgress(gameProgress);
+
+		Move m = null;
 		//below is code to edit to make your own behavior\\
-		//Move m = getAlphaBetaMove();
-		Move m = getAStarMove();
+		if (gameProgress == Const.OPENING) {
+			System.err.println("Using Astrizzles...");
+			m = getAStarMove();
+		} else {
+			System.err.println("Using AlphaBastard...");
+			m = getAlphaBetaMove();
+		}
 
   	//standard end of think() method----always use the code below
 		// perform the move before sending it
 		board.move(m);
 		currentState = new State(m, currentState);
 		
-		if(m==null){
-			System.out.println("holy shit!");
+		if(m == null){
+			System.out.println("Holy shit!");
+			System.exit(0);
 		}
 		Util.checkStateConsistency(currentState, getBoard());
 		System.err.println("My move: " + m.r1+" "+m.c1+" "+m.r2+" "+m.c2 + " "+ m.r3+" "+ m.c3);
@@ -48,7 +57,7 @@ public class AwesomeAI extends Player {
 		Move m = null;
 
 		AB_BlackBox abbox=new AB_BlackBox(getMyturn());
-		AB_BlackBox.Message output=ABSearch.gimmeAMove(getBoard(), 4);
+		AB_BlackBox.Message output=ABSearch.gimmeAMove(getBoard(), 3);
 		if(output==AB_BlackBox.Message.NEED_TO_RECOMPUTE){
 			System.err.println("oh no, ab search not finding a move. sending null move");
 		}else{
@@ -131,16 +140,11 @@ public class AwesomeAI extends Player {
 			}
 		}
 
-		p.aStarBlackBox = new AStarBlackBox(p.getMyturn());
-		p.aStarBlackBox.setMoveCutoff(5);
-		p.aStarWinningMoveList = p.aStarBlackBox.aStarSearch(p.currentState);
-
 		while (true) {
 			System.err.println("turn = "+turn+"   myturn = "+p.getMyturn());	
 			if (turn == p.getMyturn()){
 				System.err.println("It is my turn and I am thinking");	
 				System.out.println(p.think());
-				Util.printGameProgress(Util.progress(p.getBoard(), 0));
 				int status = p.getStatus();
 				if(status<0){
 					System.err.println("I lost. Status: " + status);

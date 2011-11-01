@@ -22,9 +22,9 @@ public class EndGameBlackBox {
 	public EndGameBlackBox(int turn) {
 		targetCells = new ArrayList<Cell>();
 		if (turn == 1) {
-			targetCells.add(new Cell(3, 9, 4));
 			targetCells.add(new Cell(3, 11, 4));
 			targetCells.add(new Cell(3, 13, 4));
+			targetCells.add(new Cell(3, 9, 4));
 			targetCells.add(new Cell(3, 15, 4));
 			targetCells.add(new Cell(1, 11, 3));
 			targetCells.add(new Cell(1, 13, 3));
@@ -34,9 +34,9 @@ public class EndGameBlackBox {
 			targetCells.add(new Cell(2, 14, 1));
 			defaultTargetCell = new Cell(2, 12, 1);
 		} else {
-			targetCells.add(new Cell(13, 9, 4));
 			targetCells.add(new Cell(13, 11, 4));
 			targetCells.add(new Cell(13, 13, 4));
+			targetCells.add(new Cell(13, 9, 4));
 			targetCells.add(new Cell(13, 15, 4));
 			targetCells.add(new Cell(15, 11, 3));
 			targetCells.add(new Cell(15, 13, 3));
@@ -58,6 +58,8 @@ public class EndGameBlackBox {
 	}
 
 	public Cell getNewTargetCell(State currentState) {
+		return defaultTargetCell;
+		/*
 		if (Const.ASTAR_TEST_CELL_PRIORITIES) {
 			int[][] board = currentState.reconstructBoardArray();
 			// all the cells in targetCells are ordered according to their priority
@@ -71,6 +73,7 @@ public class EndGameBlackBox {
 		} else {
 			return defaultTargetCell;
 		}
+		*/
 	}
 
 	public boolean isTargetCell(Cell c) {

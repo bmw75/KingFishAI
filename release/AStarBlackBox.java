@@ -98,17 +98,7 @@ public class AStarBlackBox {
 
 					if (useNewG) {
 						neighbor.setG(newGScore);
-						int hCost = getHeuristicCost(neighbor.getState());
-						if (Const.ASTAR_TEST_CELL_PRIORITIES) {
-							Move nextMove = neighbor.getState().getMove();
-							Cell nextCell = new Cell(nextMove.r2, nextMove.c2);
-							// hCost will be 0 if our move will lead us to a target cell
-							// this way it is encouraged that we take this move
-							if (nextCell.equals(targetCell)) {
-								hCost = 0;
-							}
-						}
-						neighbor.setH(hCost);
+						neighbor.setH(getHeuristicCost(neighbor.getState()));
 						neighbor.calculateAndSetF();
 					}
 				}
@@ -148,33 +138,22 @@ public class AStarBlackBox {
 		int[][] board = node.getState().reconstructBoardArray();
 		HashSet<StateNode> neighborNodes = new HashSet<StateNode>();
 
-		Cell targetCell = new Cell(targetR, targetC);
-		targetCell.setPriority(endGameBlackBox.getCellPriority(targetCell));
-
 		// go through all our marbles and get all possible locations we can move to.
 		// for each of these possible moves add its StateNode to the HashSet
 		// TODO: take into account moves that involve special pieces
 		for (int i = 0; i < 17; i++) {
 			for (int j = 0; j < 25; j++) {
 				if (board[i][j] == turn) {
-					Cell occupiedCell = new Cell(i, j);
-					occupiedCell.setPriority(endGameBlackBox.getCellPriority(occupiedCell));
-					// If this marble is in a cell of lower priority to the target cell
-					// then consider it and get its neighbor states. Otherwise, it
-					// already occupies a higher priority cell so don't move it.
-					if (occupiedCell.getPriority() < targetCell.getPriority()
-							|| !Const.ASTAR_TEST_CELL_PRIORITIES) { 
-						HashSet<Integer> destinations = new HashSet<Integer>();
-						Util.getBoardLegalMoves(i, j, destinations, board);
-						for (Integer dest : destinations) {
-							int r = dest / 25;
-							int c = dest % 25;
-							Move m = new Move(0, 0, 0, i, j, r, c, -1, -1);
-							State neighborState = new State(m, node.getState());
-							StateNode neighborNode = new StateNode(neighborState);
-							neighborNode.setDepth(node.getDepth() + 1);
-							neighborNodes.add(neighborNode);
-						}
+					HashSet<Integer> destinations = new HashSet<Integer>();
+					Util.getBoardLegalMoves(i, j, destinations, board);
+					for (Integer dest : destinations) {
+						int r = dest / 25;
+						int c = dest % 25;
+						Move m = new Move(0, 0, 0, i, j, r, c, -1, -1);
+						State neighborState = new State(m, node.getState());
+						StateNode neighborNode = new StateNode(neighborState);
+						neighborNode.setDepth(node.getDepth() + 1);
+						neighborNodes.add(neighborNode);
 					}
 				}
 			}
@@ -210,11 +189,32 @@ public class AStarBlackBox {
 	// Heuristic cost: go through all marbles, add their distances to target area
 	public int getHeuristicCost(State s) {
 		int[][] board = s.reconstructBoardArray();
+		int targetTopR, targetBottomR;
 		int sumDistance = 0;
+		if (turn == 1) {
+			targetTopR = 0;
+			targetBottomR = 3;
+		} else {
+			targetTopR = 13;
+			targetBottomR = 16;
+		}
+
 		for (int i = 0; i < 17; i++) {
 			for (int j = 0; j < 25; j++) {
 				if (board[i][j] == turn) {
+					boolean isInTargetTriangle = (i <= targetBottomR && i >= targetTopR);
 					sumDistance += Util.euclideanDistSq(i, j, targetR, targetC);
+					if (isInTargetTriangle) {
+						int dx = targetCell.getCol() - j;
+						int dy = targetCell.getRow() - i;
+						if (dx == 0 && dy == 0) {
+							// get to the center row quickly
+							sumDistance -= 3;
+						} else if (Math.abs(dx) <= 2 && dy != 0) {
+							// get the surrounding hexagon quickly
+							sumDistance -= 1;
+						}
+					}
 				}
 			}
 		}

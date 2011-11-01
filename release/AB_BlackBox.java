@@ -1,9 +1,11 @@
+import java.util.Arrays;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.lang.Float;
 
 public class AB_BlackBox {
 	public static enum Message{
@@ -30,10 +32,14 @@ public class AB_BlackBox {
 	int thisPlayer;
 	int otherPlayer;
 
+	HashMap<HashableBoard, Float> maxPlayerHash = new HashMap<HashableBoard, Float>();
+	HashMap<HashableBoard, Float> minPlayerHash = new HashMap<HashableBoard, Float>();
+
 	public AB_BlackBox(int whichPlayer){
 		thisPlayer=whichPlayer;
 		otherPlayer=3-thisPlayer;
 	}
+
 	//main interaction interface
 	//public AB_BlackBox.Message gimmeAMove(GameHistory gh){
 	public AB_BlackBox.Message gimmeAMove(Board b,int depth){
@@ -91,11 +97,17 @@ public class AB_BlackBox {
 	}
 
 	private float abMax(final Board b, int depthLeft, float alpha, float beta){
+		if (maxPlayerHash.containsKey(new HashableBoard(b))) {
+//			System.err.println("Boom, hashed.");
+			return maxPlayerHash.get(new HashableBoard(b));
+		}
 
 		if(depthLeft==0 || b.checkWin(thisPlayer) || b.checkWin(otherPlayer)){
 			float terminalValue=utilityOfState(b,thisPlayer);
+			maxPlayerHash.put(new HashableBoard(b), terminalValue);
 			return terminalValue;
 		}
+
 		float nodeValue=Float.NEGATIVE_INFINITY;
 		for(Move move : getMoveSet(b)) {
 			///go deeper
@@ -104,17 +116,26 @@ public class AB_BlackBox {
 			b.backwardMove(move);
 			///analyze results
 			nodeValue=Math.max(nodeValue, childValue);
-			if(nodeValue>=beta)
+			if(nodeValue>=beta) {
+				maxPlayerHash.put(new HashableBoard(b), nodeValue);
 				return nodeValue;
+			}
 			alpha=Math.max(nodeValue, alpha);
 		}
+
+		maxPlayerHash.put(new HashableBoard(b), nodeValue);
 		return nodeValue;
 	}
 
 	private float abMin(final Board b, int depthLeft, float alpha, float beta){
-		
+		if (minPlayerHash.containsKey(new HashableBoard(b))) {
+//			System.err.println("Boom, hashed.");
+			return minPlayerHash.get(new HashableBoard(b));
+		}
+
 		if(depthLeft==0 || b.checkWin(thisPlayer) || b.checkWin(otherPlayer)){
 			float terminalValue=utilityOfState(b,thisPlayer);
+			minPlayerHash.put(new HashableBoard(b), terminalValue);
 			return terminalValue;
 		}
 		float nodeValue=Float.POSITIVE_INFINITY;
@@ -125,10 +146,13 @@ public class AB_BlackBox {
 			b.backwardMove(move);
 			///analyze results
 			nodeValue=Math.min(nodeValue, childValue);
-			if(nodeValue<=alpha)
+			if(nodeValue<=alpha) {
+				minPlayerHash.put(new HashableBoard(b), nodeValue);
 				return nodeValue;
+			}
 			beta=Math.min(nodeValue, beta);
 		}
+		minPlayerHash.put(new HashableBoard(b), nodeValue);
 		return nodeValue;
 	}
 
@@ -158,22 +182,32 @@ public class AB_BlackBox {
 		}
 		return moveSet;
 	}
-	
+
 	//higher utility is better
 	private static float utilityOfState(Board board, int turn) {
-		int middleR;
-		int middleC;
-		int oppMiddleR;
-		int oppMiddleC;
+		int topR, oppTopR;
+		int bottomR, oppBottomR;
+		int middleR, middleC;
+		int oppMiddleR, oppMiddleC;
 		
 		if (turn == 1) {
+			topR = 0;
+			bottomR = 3;
 			middleR = 2;
 			middleC = 12;
+
+			oppTopR = 13;
+			oppBottomR = 16;
 			oppMiddleR = 14;
 			oppMiddleC = 12;
 		} else {
+			topR = 13;
+			bottomR = 16;
 			middleR = 14;
 			middleC = 12;
+
+			oppTopR = 0;
+			oppBottomR = 3;
 			oppMiddleR = 2;
 			oppMiddleC = 12;
 		}
@@ -184,14 +218,16 @@ public class AB_BlackBox {
 				int at=board.at(i, j);
 				//count only pieces belonging to the players
 				if(at==1 || at==2){
-					
+					boolean isInTargetTriangle = false;
 					int dx,dy;
 					if(at==turn){
 						dy=(middleR-i);
 						dx=(middleC-j);
+						isInTargetTriangle = (i <= bottomR && i >= topR);
 					}else{
 						dy=(oppMiddleR-i);
 						dx=(oppMiddleC-j);
+						isInTargetTriangle = (i <= oppBottomR && i >= oppTopR);
 					}
 					//change utility function based on where we are
 					//if we're in the goal space, try to go for the center
@@ -200,7 +236,8 @@ public class AB_BlackBox {
 					//and 2 at the corners
 					float utilToAdd;
 					//are we in the target triangle?
-					if(Math.abs(dy)<=1){
+					if (isInTargetTriangle) {
+//					if(Math.abs(dy)<=1){
 						//yes
 						//weigh distance laterally and sideways as well
 						//use hexagonal grid distance
@@ -230,7 +267,34 @@ public class AB_BlackBox {
 		}
 		return utility;
 	}
-	
+
+	class HashableBoard {
+		byte[] boardByteArray = new byte[Const.NUM_VALID_CELLS];
+
+		public HashableBoard(Board b) {
+			int index = 0;
+			for (int i = 0; i < Const.BOARD_HEIGHT; i++) {
+				for (int j = 0; j < Const.BOARD_WIDTH; j++) {
+					if (b.at(i, j) != -1) {
+						boardByteArray[index++] = (byte)b.at(i, j);
+					}
+				}
+			}
+		}
+
+		public byte[] getBoardByteArray() { return boardByteArray; }
+
+		@Override
+		public int hashCode() {
+			return Arrays.hashCode(boardByteArray);
+		}
+
+		@Override
+		public boolean equals(Object o) {
+			HashableBoard otherBoard = (HashableBoard) o;
+			return Arrays.equals(boardByteArray, otherBoard.getBoardByteArray());
+		}
+	}
 	
 	
 	//Below is ancient code left in the depths of a black box for backup.
