@@ -11,8 +11,8 @@ import java.util.Scanner;
  * a file with all of my moves and a file with all of the opponent's moves.
  * For this the program has to be called with three inputs:
  * 	- The filename of the game log file to parse.
- * 	- An integer input, stating which player we are.
- * 	- the game name (e.g. progamers_game0)
+ * 	- what your player number is
+ * 	- game name
  * Outputs:
  * 	<game_name>_mymoves.txt
  * 	<game_name>_oppmoves.txt

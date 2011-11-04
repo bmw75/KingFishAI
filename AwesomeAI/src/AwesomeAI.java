@@ -3,6 +3,8 @@ import java.util.Scanner;
 import java.util.ArrayList;
 
 public class AwesomeAI extends Player {
+	public static int specialMarblesToAdd = 0;
+	public static ArrayList<Cell> defaultSpecialMarbles = new ArrayList<Cell>();
 	public static int[][] initialBoard = new int[Const.BOARD_HEIGHT][Const.BOARD_WIDTH];
 	State currentState;
 	boolean opponentMadeAMove;
@@ -57,7 +59,7 @@ public class AwesomeAI extends Player {
 		Move m = null;
 
 		AB_BlackBox abbox=new AB_BlackBox(getMyturn());
-		AB_BlackBox.Message output=ABSearch.gimmeAMove(getBoard(), 3);
+		AB_BlackBox.Message output=ABSearch.gimmeAMove(getBoard(), 4);
 		if(output==AB_BlackBox.Message.NEED_TO_RECOMPUTE){
 			System.err.println("oh no, ab search not finding a move. sending null move");
 		}else{
@@ -137,8 +139,12 @@ public class AwesomeAI extends Player {
 		for (int i = 0; i < Const.BOARD_HEIGHT; i++) {
 			for (int j = 0; j < Const.BOARD_WIDTH; j++) {
 				AwesomeAI.initialBoard[i][j] = p.getBoard().at(i, j);
+				if (p.getBoard().at(i, j) == 3) {
+					AwesomeAI.defaultSpecialMarbles.add(new Cell(i, j));
+				}
 			}
 		}
+		AwesomeAI.specialMarblesToAdd = p.getBoard().getSpecials(1) + p.getBoard().getSpecials(2);
 
 		while (true) {
 			System.err.println("turn = "+turn+"   myturn = "+p.getMyturn());	

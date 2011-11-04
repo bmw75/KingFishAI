@@ -97,14 +97,16 @@ public class AB_BlackBox {
 	}
 
 	private float abMax(final Board b, int depthLeft, float alpha, float beta){
-		if (maxPlayerHash.containsKey(new HashableBoard(b))) {
+		if (maxPlayerHash.containsKey(new HashableBoard(b)) && Const.AB_USE_HASHING) {
 //			System.err.println("Boom, hashed.");
 			return maxPlayerHash.get(new HashableBoard(b));
 		}
 
 		if(depthLeft==0 || b.checkWin(thisPlayer) || b.checkWin(otherPlayer)){
 			float terminalValue=utilityOfState(b,thisPlayer);
-			maxPlayerHash.put(new HashableBoard(b), terminalValue);
+			if (Const.AB_USE_HASHING) {
+				maxPlayerHash.put(new HashableBoard(b), terminalValue);
+			}
 			return terminalValue;
 		}
 
@@ -117,25 +119,31 @@ public class AB_BlackBox {
 			///analyze results
 			nodeValue=Math.max(nodeValue, childValue);
 			if(nodeValue>=beta) {
-				maxPlayerHash.put(new HashableBoard(b), nodeValue);
+				if (Const.AB_USE_HASHING) {
+					maxPlayerHash.put(new HashableBoard(b), nodeValue);
+				}
 				return nodeValue;
 			}
 			alpha=Math.max(nodeValue, alpha);
 		}
 
-		maxPlayerHash.put(new HashableBoard(b), nodeValue);
+		if (Const.AB_USE_HASHING) {
+			maxPlayerHash.put(new HashableBoard(b), nodeValue);
+		}
 		return nodeValue;
 	}
 
 	private float abMin(final Board b, int depthLeft, float alpha, float beta){
-		if (minPlayerHash.containsKey(new HashableBoard(b))) {
+		if (minPlayerHash.containsKey(new HashableBoard(b)) && Const.AB_USE_HASHING) {
 //			System.err.println("Boom, hashed.");
 			return minPlayerHash.get(new HashableBoard(b));
 		}
 
 		if(depthLeft==0 || b.checkWin(thisPlayer) || b.checkWin(otherPlayer)){
 			float terminalValue=utilityOfState(b,thisPlayer);
-			minPlayerHash.put(new HashableBoard(b), terminalValue);
+			if (Const.AB_USE_HASHING) {
+				minPlayerHash.put(new HashableBoard(b), terminalValue);
+			}
 			return terminalValue;
 		}
 		float nodeValue=Float.POSITIVE_INFINITY;
@@ -147,17 +155,22 @@ public class AB_BlackBox {
 			///analyze results
 			nodeValue=Math.min(nodeValue, childValue);
 			if(nodeValue<=alpha) {
-				minPlayerHash.put(new HashableBoard(b), nodeValue);
+				if (Const.AB_USE_HASHING) {
+					minPlayerHash.put(new HashableBoard(b), nodeValue);
+				}
 				return nodeValue;
 			}
 			beta=Math.min(nodeValue, beta);
 		}
-		minPlayerHash.put(new HashableBoard(b), nodeValue);
+
+		if (Const.AB_USE_HASHING) {
+			minPlayerHash.put(new HashableBoard(b), nodeValue);
+		}
 		return nodeValue;
 	}
 
 	private static int flipTurn(int turn){
-		if(turn==1)return 2;
+		if(turn==1) return 2;
 		else return 1;
 	}
 	
@@ -269,62 +282,41 @@ public class AB_BlackBox {
 	}
 
 	class HashableBoard {
-		byte[] boardByteArray = new byte[Const.NUM_VALID_CELLS];
+		short[] pieces = new short[20 + AwesomeAI.specialMarblesToAdd];
 
 		public HashableBoard(Board b) {
 			int index = 0;
+
 			for (int i = 0; i < Const.BOARD_HEIGHT; i++) {
 				for (int j = 0; j < Const.BOARD_WIDTH; j++) {
-					if (b.at(i, j) != -1) {
-						boardByteArray[index++] = (byte)b.at(i, j);
+					if (b.at(i, j) > 0) {
+						if (!AwesomeAI.defaultSpecialMarbles.contains(new Cell(i, j))) {
+							StringBuilder sb = new StringBuilder("");
+							sb.append(b.at(i, j));
+							sb.append(i);
+							sb.append(j);
+							pieces[index++] = Short.parseShort(sb.toString());
+						}
 					}
 				}
 			}
 		}
 
-		public byte[] getBoardByteArray() { return boardByteArray; }
-
 		@Override
 		public int hashCode() {
-			return Arrays.hashCode(boardByteArray);
+			return Arrays.hashCode(pieces);
 		}
 
 		@Override
 		public boolean equals(Object o) {
 			HashableBoard otherBoard = (HashableBoard) o;
-			return Arrays.equals(boardByteArray, otherBoard.getBoardByteArray());
+			return Arrays.equals(pieces, otherBoard.pieces);
 		}
+
 	}
 	
 	
-	//Below is ancient code left in the depths of a black box for backup.
-	///hacking below
-	////////////////////////////////////
-	private static class HashableMove extends Move{
-		public HashableMove(Move m){
-			super(m.status, m.t1, m.t2, m.r1, m.c1, m.r2, m.c2, m.r3, m.c3);
-		}
-		public int hashCode(){
-			//non-valid moves containing (-1) will hash to zero, others to distinct numbers
-			return (r1+1)*(c1+1)*(r2+1)*(c2+1)*(r3+4)*(c3+4);
-		}
-		public boolean equals(Object o){
-			if(o instanceof HashableMove){
-				return equals((HashableMove)o);
-			}
-			return false;
-		}
-		public boolean equals(HashableMove m){
-			//consider only these values as important
-			return 
-				this.r1 == m.r1 &&
-				this.c1 == m.c1 &&
-				this.r2 == m.r2 &&
-				this.c2 == m.c2 &&
-				this.r3 == m.r3 &&
-				this.c3 == m.c3;
-		}
-	}
+	/*
 	private static class maxNode{
 		private static class Branch{
 			Move move;
@@ -372,5 +364,6 @@ public class AB_BlackBox {
 			branches.add(new Branch(m,n));
 		}
 	}
+	*/
 
 }

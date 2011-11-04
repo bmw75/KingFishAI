@@ -13,6 +13,9 @@
 - Alpha-Beta Search
 	> Make AB search work with the special marble black box.
 
+- Data collection
+	> Started collecting data as of Tue 01 Nov, 4 AM (where we lost against Progamers)
+
 - Classification
 	> Is there any way in which we can classify the opponent?
 	> Depending on how he's classified, are there any counter-strategies?

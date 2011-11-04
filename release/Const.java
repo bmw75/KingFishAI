@@ -10,4 +10,7 @@ public class Const {
 	public static final int OPENING = 1;
 	public static final int INTERACTING = 2;
 	public static final int CLOSING = 3;
+
+	// testing constants
+	public static final boolean AB_USE_HASHING = false;
 }
