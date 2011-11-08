@@ -32,10 +32,14 @@ public class AwesomeAI extends Player {
 
 		Move m = null;
 		//below is code to edit to make your own behavior\\
-		if (gameProgress == Const.OPENING) {
+		if (gameProgress == Const.OPENING || (gameProgress == Const.CLOSING && Const.USE_ASTAR_CLOSING)) {
 			System.err.println("Using Astrizzles...");
+      if (gameProgress == Const.CLOSING) {
+        aStarBlackBox.setMoveCutoff(15);
+      }
 			m = getAStarMove();
 		} else {
+			aStarWinningMoveList.clear();
 			System.err.println("Using AlphaBastard...");
 			m = getAlphaBetaMove();
 		}

@@ -13,4 +13,5 @@ public class Const {
 
 	// testing constants
 	public static final boolean AB_USE_HASHING = false;
+  public static final boolean USE_ASTAR_CLOSING = false;
 }

@@ -29,7 +29,7 @@ public class AStarBlackBox {
 
 		targetR = turn == 1 ? 0 : 16;
 		targetC = 12;
-		targetCell = new Cell(targetR, targetC);
+    targetCell = new Cell(targetR, targetC);
 		homeR = turn == 1 ? 16 : 0;
 		homeC = 12;
 	}
@@ -60,8 +60,10 @@ public class AStarBlackBox {
 			statesVisited++;
 			StateNode chosenNode = getNodeWithLowestFScore(nodesToCheck);
 			targetCell = endGameBlackBox.getNewTargetCell(chosenNode.getState());
+      /*
 			targetR = targetCell.getRow();
 			targetC = targetCell.getCol();
+      */
 			/*
 			System.err.println("A* Chosen Node:");
 		 	System.err.println("H cost: "	+ chosenNode.getH());
@@ -202,21 +204,36 @@ public class AStarBlackBox {
 		for (int i = 0; i < 17; i++) {
 			for (int j = 0; j < 25; j++) {
 				if (board[i][j] == turn) {
+					int dx = targetCell.getCol() - j;
+					int dy = targetCell.getRow() - i;
 					boolean isInTargetTriangle = (i <= targetBottomR && i >= targetTopR);
 					if (isInTargetTriangle) {
 						sumDistance += Util.dist(i, j, targetR, targetC);
 						int dx = targetCell.getCol() - j;
 						int dy = targetCell.getRow() - i;
-						if (dx == 0 && dy == 0) {
-							// get to the center row quickly
-							sumDistance -= 3;
-						} else if (Math.abs(dx) <= 2 && dy != 0) {
-							// get the surrounding hexagon quickly
-							sumDistance -= 1;
-						}
+            if ((turn == 1 && i == 3) || (turn == 2 && i == 13)) {
+              // get the 4-cell row first
+              sumDistance -= 3;
+            } else if (Math.abs(dx) <= 3 && Math.abs(dy) == 1) {
+              // get the 4-cell and 2-cell rows first
+              sumDistance -= 2;
+            } else if (Math.abs(dx) <= 2 && dy != 0) {
+              // aim for the other cells, excluding center row
+              sumDistance -= 1;
+            }
 					} else {
 						sumDistance += Util.euclideanDistSq(i, j, targetR, targetC);
 					}
+
+					/*
+						 if (dx == 0 && dy == 0) {
+					// get to the center row quickly
+					sumDistance -= 3;
+					} else if (Math.abs(dx) <= 2 && dy != 0) {
+					// get the surrounding hexagon quickly
+					sumDistance -= 1;
+					}
+					*/
 				}
 			}
 		}
