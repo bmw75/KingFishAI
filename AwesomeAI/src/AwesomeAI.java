@@ -134,6 +134,19 @@ public class AwesomeAI extends Player {
 	}
 
 	public static void main(String args[]){
+		
+		if (args.length ==5){
+			System.err.println("THINGS ARE WORKING");
+		float horz = Float.parseFloat(args[0]);
+		float vert = Float.parseFloat(args[1]);
+		float straggler = Float.parseFloat(args[2]);
+		float chain = Float.parseFloat(args[3]);
+		float interact = Float.parseFloat(args[4]);
+		
+		AB_BlackBox.setWeights(horz, vert, straggler, chain);
+		Util.setInteractDist(interact);		
+		}
+				
 		int turn = 1;
 		AwesomeAI p = new AwesomeAI(new Scanner(System.in));
 

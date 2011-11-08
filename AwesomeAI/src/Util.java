@@ -106,13 +106,16 @@ public class Util {
 		return prevProg; // If no decision can be made return prevProg
 						 // (other option is to simply return unknown, but prevProg should reduce computations)
 	}
-
+	
+	public static float interactDist = 9;
+	public static void setInteractDist(float dist){interactDist = dist;};
+	
 	private static boolean interacting(Board board){
 		Piece[] myPieces = getPieces(board,1);
 		Piece[] hisPieces = getPieces(board,2);
 		for (Piece mine:myPieces){
 			for (Piece his:hisPieces){
-				if (euclideanDistSq(mine.r,mine.c,his.r,his.c) < 9) return true;
+				if (euclideanDistSq(mine.r,mine.c,his.r,his.c) < interactDist) return true;
 			}
 		}
 		

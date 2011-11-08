@@ -8,6 +8,19 @@ import java.util.Map;
 import java.lang.Float;
 
 public class AB_BlackBox {
+	
+	public static float horzDistWeight = 1;
+	public static float vertDistWeight = 1;
+	public static float stragglerWeight = 1;
+	public static float chainWeight = 1;
+	
+	public static void setWeights (float horz, float vert, float straggler, float chain){
+		horzDistWeight=horz;
+		vertDistWeight=vert;
+		stragglerWeight = straggler;
+		chainWeight=chain;
+	}
+	
 	public static enum Message{
 		MOVE_FOUND,NEED_TO_RECOMPUTE;
 		//if move found, store it as 
@@ -278,7 +291,10 @@ public class AB_BlackBox {
 				}
 			}
 		}
-		return utility;
+		
+		float chainUtil = 0; float stragglerUtil = 0; float horzDistUtil=0; float vertDistUtil=0; 
+		//TODO implement / segment up Utility into separate Utils for chains, stragglers, horizontal dist, and vert dist.
+		return vertDistWeight*utility + horzDistWeight*utility + chainWeight*chainUtil + stragglerWeight*stragglerUtil;
 	}
 
 	class HashableBoard {
