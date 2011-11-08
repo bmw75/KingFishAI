@@ -203,8 +203,8 @@ public class AStarBlackBox {
 			for (int j = 0; j < 25; j++) {
 				if (board[i][j] == turn) {
 					boolean isInTargetTriangle = (i <= targetBottomR && i >= targetTopR);
-					sumDistance += Util.euclideanDistSq(i, j, targetR, targetC);
 					if (isInTargetTriangle) {
+						sumDistance += Util.dist(i, j, targetR, targetC);
 						int dx = targetCell.getCol() - j;
 						int dy = targetCell.getRow() - i;
 						if (dx == 0 && dy == 0) {
@@ -214,6 +214,8 @@ public class AStarBlackBox {
 							// get the surrounding hexagon quickly
 							sumDistance -= 1;
 						}
+					} else {
+						sumDistance += Util.euclideanDistSq(i, j, targetR, targetC);
 					}
 				}
 			}

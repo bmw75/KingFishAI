@@ -281,6 +281,48 @@ public class AB_BlackBox {
 		return utility;
 	}
 
+	private static class HashableBoard {
+
+		byte[] boardByteArray = new byte[(Const.NUM_VALID_CELLS+3)/4];
+
+		public HashableBoard(Board b) {
+			//optimization:
+			//each byte can actually hold the representation of 4 cells
+			int index = 0;
+			int indexInByte = 0;
+			for (int i = 0; i < Const.BOARD_HEIGHT; i++) {
+				for (int j = 0; j < Const.BOARD_WIDTH; j++) {
+					int at=b.at(i, j);
+					if (at != -1) {
+						//then the integer is 0,1,2, or 3
+						boardByteArray[index] += (byte)(at<<indexInByte);
+						//update positions to add representation
+						indexInByte+=2;
+						if(indexInByte==8){
+							index++;
+							indexInByte=0;
+						}
+					}
+				}
+			}
+		}
+
+		public byte[] getBoardByteArray() { return boardByteArray; }
+
+		@Override
+			public int hashCode() {
+				return Arrays.hashCode(boardByteArray);
+			}
+
+		@Override
+			public boolean equals(Object o) {
+				HashableBoard otherBoard = (HashableBoard) o;
+				return Arrays.equals(boardByteArray, otherBoard.getBoardByteArray());
+			}
+	}
+
+
+	/*
 	class HashableBoard {
 		short[] pieces = new short[20 + AwesomeAI.specialMarblesToAdd];
 
@@ -314,56 +356,5 @@ public class AB_BlackBox {
 		}
 
 	}
-	
-	
-	/*
-	private static class maxNode{
-		private static class Branch{
-			Move move;
-			minNode child;
-			private Branch(Move m,minNode c){
-				move=m;
-				child=c;
-			}
-		}
-		List<Branch> branches;
-		float value;
-		Branch bestMove;
-		public maxNode(float v){
-			branches=new ArrayList<Branch>(10);
-			value=v;
-			bestMove=null;
-		}
-		public void addBranch(Move m,minNode n){
-			Branch b=new Branch(m,n);
-			if(bestMove==null || n.value>bestMove.child.value){
-				bestMove=b;
-			}
-			branches.add(b);
-		}
-		public Move getBestMove(){
-			return bestMove.move;
-		}
-	}
-	private static class minNode{
-		private static class Branch{
-			Move move;
-			maxNode child;
-			public Branch(Move m,maxNode c){
-				move=m;
-				child=c;
-			}
-		}
-		List<Branch> branches;
-		float value;
-		public minNode(float v){
-			branches=new ArrayList<Branch>(10);
-			value=v;
-		}
-		public void addBranch(Move m,maxNode n){
-			branches.add(new Branch(m,n));
-		}
-	}
 	*/
-
 }
