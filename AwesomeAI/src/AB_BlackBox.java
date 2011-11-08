@@ -9,12 +9,12 @@ import java.lang.Float;
 
 public class AB_BlackBox {
 	
-	public static float horzDistWeight = 1;
-	public static float vertDistWeight = 1;
-	public static float stragglerWeight = 1;
-	public static float chainWeight = 1;
+	public float horzDistWeight = 1;
+	public float vertDistWeight = 1;
+	public float stragglerWeight = 1;
+	public float chainWeight = 1;
 	
-	public static void setWeights (float horz, float vert, float straggler, float chain){
+	public void setWeights (float horz, float vert, float straggler, float chain){
 		horzDistWeight=horz;
 		vertDistWeight=vert;
 		stragglerWeight = straggler;
@@ -48,9 +48,14 @@ public class AB_BlackBox {
 	HashMap<HashableBoard, Float> maxPlayerHash = new HashMap<HashableBoard, Float>();
 	HashMap<HashableBoard, Float> minPlayerHash = new HashMap<HashableBoard, Float>();
 
-	public AB_BlackBox(int whichPlayer){
+	public AB_BlackBox(int whichPlayer, float horz, float vert, float straggler, float chain){
 		thisPlayer=whichPlayer;
 		otherPlayer=3-thisPlayer;
+		
+		horzDistWeight=horz;
+		vertDistWeight=vert;
+		stragglerWeight = straggler;
+		chainWeight=chain;
 	}
 
 	//main interaction interface
@@ -210,7 +215,7 @@ public class AB_BlackBox {
 	}
 
 	//higher utility is better
-	private static float utilityOfState(Board board, int turn) {
+	private float utilityOfState(Board board, int turn) {
 		int topR, oppTopR;
 		int bottomR, oppBottomR;
 		int middleR, middleC;
