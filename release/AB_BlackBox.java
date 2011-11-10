@@ -299,7 +299,8 @@ public class AB_BlackBox {
 		
 		float chainUtil = 0; float stragglerUtil = 0; float horzDistUtil=0; float vertDistUtil=0; 
 		//TODO implement / segment up Utility into separate Utils for chains, stragglers, horizontal dist, and vert dist.
-		return vertDistWeight*utility + horzDistWeight*utility + chainWeight*chainUtil + stragglerWeight*stragglerUtil;
+		return vertDistWeight*utility + horzDistUtil + stragglerUtil + chainUtil;
+		//return vertDistWeight*utility + horzDistWeight*utility + chainWeight*chainUtil + stragglerWeight*stragglerUtil;
 	}
 
 	class HashableBoard {

@@ -1,5 +1,6 @@
 import java.io.PrintWriter;
 import java.util.Calendar;
+import java.util.Vector;
 import java.io.FileNotFoundException;
 
 public class MultiRunGameServer {
@@ -184,12 +185,27 @@ public class MultiRunGameServer {
 		}
 	}
 	
-	private static String getWeights(){
-		String weights = Math.random() + " " + Math.random()  + " " + Math.random()  + " " + Math.random()  + " " + Math.random()*24.0;
+	private static String[] getSuccessors(float[] start){
+		String[] weights = {
+		start[0]*(Math.random()+.5) + " " + start[1]  + " " + start[2]  + " " + start[3]  + " " + start[4],
+		start[0] + " " + start[1]*(Math.random()+.5)  + " " + start[2]  + " " + start[3]  + " " + start[4],
+		start[0] + " " + start[1]  + " " + start[2]*(Math.random()+.5)  + " " + start[3]  + " " + start[4],
+		start[0] + " " + start[1]  + " " + start[2]  + " " + start[3]*(Math.random()+.5)  + " " + start[4],
+		start[0] + " " + start[1]  + " " + start[2]  + " " + start[3]  + " " + start[4]*(Math.random()+.5),
+		};
 		return weights;
 	}
+	
+	private static float[] parseWeights(String weights){
+		String[] numbers = weights.split(" ");
+		float[] floatVals = new float[weights.length()-1];
+		for (int i =0; i < numbers.length; i++){
+			floatVals[i] = Float.parseFloat(numbers[i]);
+		}
+		return floatVals;
+	}
 		
-	private static boolean p1won = true;
+	//private static boolean p1won = true;
 	
 	/**
 	 * @param args
@@ -257,128 +273,138 @@ public class MultiRunGameServer {
 		int runs = Integer.parseInt(args[7]);
 
 		String p1weights = args[8];
-		String p2weights = getWeights();
+		//String p2weights = getSuccessors(p1weights);
 		
 		String player1;
 		String player2;
 
 		while (runs>0){
 			
-			p1weights = (p1won) ? p1weights : p2weights;
-			p2weights = getWeights();
-						
-//	        MultiRunGameServer gs; 
-//	        Process p1;
-//	        Process p2;
-//	        String initialBoard;
-//	        int exit1=-1;
-//	        int exit2=-1;
-//	        int winner=-1;
-//	        int port=-1;
-//	        int maxmem=-1;
-//	        Runtime r=Runtime.getRuntime();
-//	        
-//	        if (args.length == 10)
-//	            initialBoard = args[9];
-//	        else
-//	            initialBoard = null;
-//	
-//	        try{
-//	            port=Integer.parseInt(args[0]);
-//	            if(port<1024 || port>65535){
-//	                System.out.println("Invalid port number "+port);
-//	                return;
-//	            }
-//	        }catch(Exception e){
-//	            e.printStackTrace();
-//	            return;
-//	        }
-//	
-//	        try{
-//	            maxmem=Integer.parseInt(args[1]);
-//	            /* Since some JVMs will not run if the address space is small
-//	             * we ignore this for now and allow 2 Gigabytes. Which is the 
-//	             * absolute maximum we could ever allow.
-//	             */
-//	            maxmem=2*1024*1024*1024-1;
-//	        }catch(Exception e){
-//	            e.printStackTrace();
-//	            return;
-//	        }
-//	
-			System.err.println(port);
-			port+=10;
-			player1Thread = new ConnectionThread(port);
-			player2Thread = new ConnectionThread(port+2);
-			player1Thread.start();
-			player2Thread.start();
-	        try{
-	            Thread.sleep(1000);
-	        }catch(Exception e){
-	            e.printStackTrace();
-	            System.exit(1);
-	        }
-	        
-//	        System.err.println(args[4]); //TODO
-//	        player1 = args[4].substring(0, args[4].length()-1) + p1weights +"'";
-//	        player2 = args[5].substring(0, args[5].length()-1) + p1weights +"'";
-//	        System.err.println(player1); //TODO
-	        
-	        //System.err.println(args[4]);
-	        //System.err.println(args[5]);
-	        player1 = args[4]+" "+p1weights;
-	        player2 = args[5]+" "+p2weights;
-	        System.err.println(player1);
-	        System.err.println(player2);
-	        
-	        try{
-	            p1=r.exec("./stdwrap "+maxmem+" "+port+" "+args[2]+" "+player1);
-	            p2=r.exec("./stdwrap "+maxmem+" "+(port+2)+" "+args[3]+" "+player2);
-	        }catch(Exception e){
-	            e.printStackTrace();            
-	            System.exit(1);
-	            return;
-	        }
-	
-			try {
-				player1Thread.join();
-				player2Thread.join();
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-				return;
-			}
+			Vector<String> winWeights = new Vector<String>();
 			
-			// Connections are established for both players.
-			gs = new MultiRunGameServer(args[6],initialBoard,player1Thread,player2Thread);
-			winner=gs.play();
-	        try{
-	            Thread.sleep(1000);
-	        }catch(Exception e){
-	            e.printStackTrace();
-	        }
-	        p1.destroy();
-	        p2.destroy();
-	        try{
-	            exit1=p1.waitFor();
-	            exit2=p2.waitFor();
-	        }
-	        catch(InterruptedException e){
-	            exit1=-878;
-	            exit2=-878;
-	        }
-	        System.err.println("Allotted Time - Player 1: "+gs.allotedTime[0]+" Player 2: "+gs.allotedTime[1]);
-	        System.err.println("Player 1");
-	        System.err.println(gs.time[0]+" "+42);
-	        System.err.println("Exit value = "+exit1);
-	        System.err.println("Player 2");
-	        System.err.println(gs.time[1]+" "+42);
-	        System.err.println("Exit value = "+exit2);
-	        System.err.println(winner);
-	        
-	        p1won = (winner == 1);
-	        runs--;
+			//p1weights = (p1won) ? p1weights : p2weights;
+			String[] successors = getSuccessors(parseWeights(p1weights));
+			
+			for (String p2weights : successors){
+						
+	//	        MultiRunGameServer gs; 
+	//	        Process p1;
+	//	        Process p2;
+	//	        String initialBoard;
+	//	        int exit1=-1;
+	//	        int exit2=-1;
+	//	        int winner=-1;
+	//	        int port=-1;
+	//	        int maxmem=-1;
+	//	        Runtime r=Runtime.getRuntime();
+	//	        
+	//	        if (args.length == 10)
+	//	            initialBoard = args[9];
+	//	        else
+	//	            initialBoard = null;
+	//	
+	//	        try{
+	//	            port=Integer.parseInt(args[0]);
+	//	            if(port<1024 || port>65535){
+	//	                System.out.println("Invalid port number "+port);
+	//	                return;
+	//	            }
+	//	        }catch(Exception e){
+	//	            e.printStackTrace();
+	//	            return;
+	//	        }
+	//	
+	//	        try{
+	//	            maxmem=Integer.parseInt(args[1]);
+	//	            /* Since some JVMs will not run if the address space is small
+	//	             * we ignore this for now and allow 2 Gigabytes. Which is the 
+	//	             * absolute maximum we could ever allow.
+	//	             */
+	//	            maxmem=2*1024*1024*1024-1;
+	//	        }catch(Exception e){
+	//	            e.printStackTrace();
+	//	            return;
+	//	        }
+	//	
+				System.err.println(port);
+				port+=10;
+				player1Thread = new ConnectionThread(port);
+				player2Thread = new ConnectionThread(port+2);
+				player1Thread.start();
+				player2Thread.start();
+		        try{
+		            Thread.sleep(1000);
+		        }catch(Exception e){
+		            e.printStackTrace();
+		            System.exit(1);
+		        }
+		        
+	//	        System.err.println(args[4]); //TODO
+	//	        player1 = args[4].substring(0, args[4].length()-1) + p1weights +"'";
+	//	        player2 = args[5].substring(0, args[5].length()-1) + p1weights +"'";
+	//	        System.err.println(player1); //TODO
+		        
+		        //System.err.println(args[4]);
+		        //System.err.println(args[5]);
+		        player1 = args[4]+" "+p1weights;
+		        player2 = args[5]+" "+p2weights;
+		        System.err.println(player1);
+		        System.err.println(player2);
+		        
+		        try{
+		            p1=r.exec("./stdwrap "+maxmem+" "+port+" "+args[2]+" "+player1);
+		            p2=r.exec("./stdwrap "+maxmem+" "+(port+2)+" "+args[3]+" "+player2);
+		        }catch(Exception e){
+		            e.printStackTrace();            
+		            System.exit(1);
+		            return;
+		        }
+		
+				try {
+					player1Thread.join();
+					player2Thread.join();
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+					return;
+				}
+				
+				// Connections are established for both players.
+				gs = new MultiRunGameServer(args[6],initialBoard,player1Thread,player2Thread);
+				winner=gs.play();
+		        try{
+		            Thread.sleep(1000);
+		        }catch(Exception e){
+		            e.printStackTrace();
+		        }
+		        p1.destroy();
+		        p2.destroy();
+		        try{
+		            exit1=p1.waitFor();
+		            exit2=p2.waitFor();
+		        }
+		        catch(InterruptedException e){
+		            exit1=-878;
+		            exit2=-878;
+		        }
+		        System.err.println("Allotted Time - Player 1: "+gs.allotedTime[0]+" Player 2: "+gs.allotedTime[1]);
+		        System.err.println("Player 1");
+		        System.err.println(gs.time[0]+" "+42);
+		        System.err.println("Exit value = "+exit1);
+		        System.err.println("Player 2");
+		        System.err.println(gs.time[1]+" "+42);
+		        System.err.println("Exit value = "+exit2);
+		        System.err.println(winner);
+		        
+		       // p1won = (winner == 1);
+		        if (winner == 2){
+		        	winWeights.add(p2weights);
+		        }
+			}
+			if (winWeights.size()>0){
+				p1weights = winWeights.get((int) Math.round(Math.random()*winWeights.size()));
+			}
+			runs--;
 		}
-		String bestWeights = (p1won) ? p1weights : p2weights;
-		System.err.println(bestWeights);
+		System.err.println(p1weights);
 	}
 }

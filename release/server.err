@@ -1,56 +1,166 @@
 4700
-java AwesomeAI 1 1 1 1 1
-java GreedyAI 0.28101350180926576 0.44021554221148695 0.40081136703456666 0.3279413475461629 2.581294164369801
+java AwesomeAI .9 .9 1 1 1
+java AwesomeAI 1.1531434731803374 0.9 1.0 1.0 1.0
 Allotted Time - Player 1: 600000 Player 2: 600000
 Player 1
-599091 42
+599127 42
 Exit value = 0
 Player 2
-599955 42
+599085 42
 Exit value = 0
 1
 4710
-java AwesomeAI 1 1 1 1 1
-java GreedyAI 0.8668733076437181 0.5671938242581803 0.7585622090482849 0.7364227819537033 13.240647405615748
+java AwesomeAI .9 .9 1 1 1
+java AwesomeAI 0.9 0.552862583934458 1.0 1.0 1.0
 Allotted Time - Player 1: 600000 Player 2: 600000
 Player 1
-598956 42
+599166 42
 Exit value = 0
 Player 2
-599935 42
+599144 42
 Exit value = 0
 1
 4720
-java AwesomeAI 1 1 1 1 1
-java GreedyAI 0.5331440264005111 0.30103862795851466 0.6490981231470653 0.6586402902651323 2.754819807360219
+java AwesomeAI .9 .9 1 1 1
+java AwesomeAI 0.9 0.9 0.947955764106348 1.0 1.0
 Allotted Time - Player 1: 600000 Player 2: 600000
 Player 1
-598774 42
+599135 42
 Exit value = 0
 Player 2
-599910 42
+599123 42
 Exit value = 0
 1
 4730
-java AwesomeAI 1 1 1 1 1
-java GreedyAI 0.42564634467932705 0.8298491829961722 0.1712353322273622 0.7414224351224805 5.2302715483600855
+java AwesomeAI .9 .9 1 1 1
+java AwesomeAI 0.9 0.9 1.0 1.2639703527761257 1.0
 Allotted Time - Player 1: 600000 Player 2: 600000
 Player 1
-598915 42
+599173 42
 Exit value = 0
 Player 2
-599907 42
+599153 42
 Exit value = 0
 1
 4740
-java AwesomeAI 1 1 1 1 1
-java GreedyAI 0.7831722739152333 0.046516582012752994 0.9395153792965013 0.8257951695955218 5.961274350717155
+java AwesomeAI .9 .9 1 1 1
+java AwesomeAI 0.9 0.9 1.0 1.0 0.6373064160660463
 Allotted Time - Player 1: 600000 Player 2: 600000
 Player 1
-599065 42
+599120 42
 Exit value = 0
 Player 2
-599928 42
+599106 42
 Exit value = 0
 1
-1 1 1 1 1
+4750
+java AwesomeAI .9 .9 1 1 1
+java AwesomeAI 0.74700452831697 0.9 1.0 1.0 1.0
+Allotted Time - Player 1: 600000 Player 2: 600000
+Player 1
+599154 42
+Exit value = 0
+Player 2
+599116 42
+Exit value = 0
+1
+4760
+java AwesomeAI .9 .9 1 1 1
+java AwesomeAI 0.9 0.47719703157992854 1.0 1.0 1.0
+Allotted Time - Player 1: 600000 Player 2: 600000
+Player 1
+599101 42
+Exit value = 0
+Player 2
+599100 42
+Exit value = 0
+1
+4770
+java AwesomeAI .9 .9 1 1 1
+java AwesomeAI 0.9 0.9 1.1162087842978505 1.0 1.0
+Allotted Time - Player 1: 600000 Player 2: 600000
+Player 1
+599152 42
+Exit value = 0
+Player 2
+599106 42
+Exit value = 0
+1
+4780
+java AwesomeAI .9 .9 1 1 1
+java AwesomeAI 0.9 0.9 1.0 0.6637639006081313 1.0
+Allotted Time - Player 1: 600000 Player 2: 600000
+Player 1
+599163 42
+Exit value = 0
+Player 2
+599189 42
+Exit value = 0
+1
+4790
+java AwesomeAI .9 .9 1 1 1
+java AwesomeAI 0.9 0.9 1.0 1.0 1.3968728700109807
+Allotted Time - Player 1: 600000 Player 2: 600000
+Player 1
+599153 42
+Exit value = 0
+Player 2
+599131 42
+Exit value = 0
+1
+4800
+java AwesomeAI .9 .9 1 1 1
+java AwesomeAI 0.5109479210438201 0.9 1.0 1.0 1.0
+Allotted Time - Player 1: 600000 Player 2: 600000
+Player 1
+599121 42
+Exit value = 0
+Player 2
+599109 42
+Exit value = 0
+1
+4810
+java AwesomeAI .9 .9 1 1 1
+java AwesomeAI 0.9 0.7422537230597979 1.0 1.0 1.0
+Allotted Time - Player 1: 600000 Player 2: 600000
+Player 1
+599125 42
+Exit value = 0
+Player 2
+599097 42
+Exit value = 0
+1
+4820
+java AwesomeAI .9 .9 1 1 1
+java AwesomeAI 0.9 0.9 1.1931883355232076 1.0 1.0
+Allotted Time - Player 1: 600000 Player 2: 600000
+Player 1
+599142 42
+Exit value = 0
+Player 2
+599125 42
+Exit value = 0
+1
+4830
+java AwesomeAI .9 .9 1 1 1
+java AwesomeAI 0.9 0.9 1.0 1.4524341788984754 1.0
+Allotted Time - Player 1: 600000 Player 2: 600000
+Player 1
+599159 42
+Exit value = 0
+Player 2
+599175 42
+Exit value = 0
+1
+4840
+java AwesomeAI .9 .9 1 1 1
+java AwesomeAI 0.9 0.9 1.0 1.0 0.8902683734324621
+Allotted Time - Player 1: 600000 Player 2: 600000
+Player 1
+599144 42
+Exit value = 0
+Player 2
+599127 42
+Exit value = 0
+1
+.9 .9 1 1 1
