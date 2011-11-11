@@ -1,5 +1,7 @@
 import java.util.Arrays;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -8,6 +10,18 @@ import java.util.Map;
 import java.lang.Float;
 
 public class AB_BlackBox {
+	private static long time = 0;
+	private static int hashHits = 0;
+	private static int statesVisited = 0;
+	private static int totalStatesVisited = 0;
+	private static int numtimes = 0;
+
+	int thisPlayer;
+	int otherPlayer;
+
+	HashMap<HashableBoard, Float> maxPlayerHash = new HashMap<HashableBoard, Float>(100000);
+	HashMap<HashableBoard, Float> minPlayerHash = new HashMap<HashableBoard, Float>(100000);
+
 	public static enum Message{
 		MOVE_FOUND,NEED_TO_RECOMPUTE;
 		//if move found, store it as 
@@ -23,17 +37,11 @@ public class AB_BlackBox {
 			if(this==MOVE_FOUND){
 				return move;
 			}else{
-				System.err.println("Why are you querrying for a move? I told you there's none.");
+				System.err.println("Why are you querying for a move? I told you there's none.");
 				return null;
 			}
 		}
 	}
-
-	int thisPlayer;
-	int otherPlayer;
-
-	HashMap<HashableBoard, Float> maxPlayerHash = new HashMap<HashableBoard, Float>();
-	HashMap<HashableBoard, Float> minPlayerHash = new HashMap<HashableBoard, Float>();
 
 	public AB_BlackBox(int whichPlayer){
 		thisPlayer=whichPlayer;
@@ -43,7 +51,23 @@ public class AB_BlackBox {
 	//main interaction interface
 	//public AB_BlackBox.Message gimmeAMove(GameHistory gh){
 	public AB_BlackBox.Message gimmeAMove(Board b,int depth){
+		maxPlayerHash.clear();
+		minPlayerHash.clear();
+		hashHits = 0;
+		statesVisited = 0;
 		Move best=recompute(b,depth);
+
+		// begin data printing:
+		System.err.println("ABStates visited: " + statesVisited);
+		System.err.println("Hash hits: " + hashHits);
+		totalStatesVisited += statesVisited;
+		numtimes += 1;
+		float average = ((float) totalStatesVisited) / ((float) numtimes);
+		System.err.println("Total states visited: " + totalStatesVisited);
+		System.err.println("Average states visited: " + average);
+		System.err.println("Time taken sorting: " + (time * Math.pow(10, -9)));
+		System.err.println("Hashed states: " + maxPlayerHash.size() + minPlayerHash.size());
+
 		if(best==null){
 			return Message.NEED_TO_RECOMPUTE;
 		}else{
@@ -98,6 +122,7 @@ public class AB_BlackBox {
 
 	private float abMax(final Board b, int depthLeft, float alpha, float beta){
 		if (maxPlayerHash.containsKey(new HashableBoard(b)) && Const.AB_USE_HASHING) {
+			hashHits++;
 //			System.err.println("Boom, hashed.");
 			return maxPlayerHash.get(new HashableBoard(b));
 		}
@@ -110,13 +135,49 @@ public class AB_BlackBox {
 			return terminalValue;
 		}
 
-		float nodeValue=Float.NEGATIVE_INFINITY;
-		for(Move move : getMoveSet(b)) {
-			///go deeper
+		List<Move> moveSet = getMoveSet(b);
+		if (Const.AB_USE_MOVE_ORDERING) {
+			long startTime = System.nanoTime();
+			Collections.sort(moveSet, new Comparator<Move>(){
+				HashMap<Move, Float> moveUtilityHash = new HashMap<Move, Float>(64);
+				@Override
+				public int compare(Move m1, Move m2) {
+					float utility1, utility2;
+					if (moveUtilityHash.containsKey(m1)) {
+						utility1 = moveUtilityHash.get(m1);
+					} else {
+						b.move(m1);
+						utility1 = utilityOfState(b, thisPlayer);
+						moveUtilityHash.put(m1, utility1);
+						b.backwardMove(m1);
+					}
+					if (moveUtilityHash.containsKey(m2)) {
+						utility2 = moveUtilityHash.get(m2);
+					} else {
+						b.move(m2);
+						utility2 = utilityOfState(b, thisPlayer);
+						moveUtilityHash.put(m2, utility2);
+						b.backwardMove(m2);
+					}
+
+					float diff = utility1 - utility2;
+					if (diff > 0) return -1;
+					else if (diff < 0) return 1;
+					else return 0;
+				}
+			});
+			long endTime = System.nanoTime();
+		 	time += (endTime - startTime);
+		}
+
+		float nodeValue = Float.NEGATIVE_INFINITY;
+		for(Move move : moveSet) {
+			statesVisited++;
+			//go deeper
 			b.move(move);
 			float childValue=abMin(b,depthLeft-1,alpha,beta);
 			b.backwardMove(move);
-			///analyze results
+			//analyze results
 			nodeValue=Math.max(nodeValue, childValue);
 			if(nodeValue>=beta) {
 				if (Const.AB_USE_HASHING) {
@@ -135,6 +196,7 @@ public class AB_BlackBox {
 
 	private float abMin(final Board b, int depthLeft, float alpha, float beta){
 		if (minPlayerHash.containsKey(new HashableBoard(b)) && Const.AB_USE_HASHING) {
+			hashHits++;
 //			System.err.println("Boom, hashed.");
 			return minPlayerHash.get(new HashableBoard(b));
 		}
@@ -146,13 +208,50 @@ public class AB_BlackBox {
 			}
 			return terminalValue;
 		}
-		float nodeValue=Float.POSITIVE_INFINITY;
-		for(Move move : getMoveSet(b)) {
-			///go deeper
+
+		List<Move> moveSet = getMoveSet(b);
+		if (Const.AB_USE_MOVE_ORDERING) {
+			long startTime = System.nanoTime();
+			Collections.sort(moveSet, new Comparator<Move>(){
+				HashMap<Move, Float> moveUtilityHash = new HashMap<Move, Float>(64);
+				@Override
+				public int compare(Move m1, Move m2) {
+					float utility1, utility2;
+					if (moveUtilityHash.containsKey(m1)) {
+						utility1 = moveUtilityHash.get(m1);
+					} else {
+						b.move(m1);
+						utility1 = utilityOfState(b, thisPlayer);
+						moveUtilityHash.put(m1, utility1);
+						b.backwardMove(m1);
+					}
+					if (moveUtilityHash.containsKey(m2)) {
+						utility2 = moveUtilityHash.get(m2);
+					} else {
+						b.move(m2);
+						utility2 = utilityOfState(b, thisPlayer);
+						moveUtilityHash.put(m2, utility2);
+						b.backwardMove(m2);
+					}
+
+					float diff = utility1 - utility2;
+					if (diff > 0) return 1;
+					else if (diff < 0) return -1;
+					else return 0;
+				}
+			});
+			long endTime = System.nanoTime();
+			time += (endTime - startTime);
+		}
+
+		float nodeValue = Float.POSITIVE_INFINITY;
+		for(Move move : moveSet) {
+			statesVisited++;
+			//go deeper
 			b.move(move);
 			float childValue=abMax(b,depthLeft-1,alpha,beta);
 			b.backwardMove(move);
-			///analyze results
+			//analyze results
 			nodeValue=Math.min(nodeValue, childValue);
 			if(nodeValue<=alpha) {
 				if (Const.AB_USE_HASHING) {
@@ -169,13 +268,7 @@ public class AB_BlackBox {
 		return nodeValue;
 	}
 
-	private static int flipTurn(int turn){
-		if(turn==1) return 2;
-		else return 1;
-	}
-	
 	// We go through all our marbles and get all possible locations we can move to.
-	// TODO: take into account moves that involve special pieces
 	private static List<Move> getMoveSet(Board board) {
 		int turn=board.getTurn();
 		List<Move> moveSet = new LinkedList<Move>();
@@ -231,16 +324,14 @@ public class AB_BlackBox {
 				int at=board.at(i, j);
 				//count only pieces belonging to the players
 				if(at==1 || at==2){
-					boolean isInTargetTriangle = false;
+					boolean isInTargetTriangle = Util.isInTargetTriangle(i, at);
 					int dx,dy;
 					if(at==turn){
 						dy=(middleR-i);
 						dx=(middleC-j);
-						isInTargetTriangle = (i <= bottomR && i >= topR);
 					}else{
 						dy=(oppMiddleR-i);
 						dx=(oppMiddleC-j);
-						isInTargetTriangle = (i <= oppBottomR && i >= oppTopR);
 					}
 					//change utility function based on where we are
 					//if we're in the goal space, try to go for the center

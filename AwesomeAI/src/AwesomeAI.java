@@ -32,11 +32,13 @@ public class AwesomeAI extends Player {
 
 		Move m = null;
 		//below is code to edit to make your own behavior\\
-		if (gameProgress == Const.OPENING || (gameProgress == Const.CLOSING && Const.USE_ASTAR_CLOSING)) {
-			System.err.println("Using Astrizzles...");
+		if (gameProgress == Const.OPENING || (gameProgress == Const.CLOSING && Const.USE_ASTAR_CLOSING) || (gameProgress == Const.INTERACTING && Const.USE_ASTAR_CLOSING)) {
       if (gameProgress == Const.CLOSING) {
-        aStarBlackBox.setMoveCutoff(15);
-      }
+				aStarBlackBox.useClosingHeuristic(true);
+        aStarBlackBox.setMoveCutoff(5);
+      } else {
+				aStarBlackBox.useClosingHeuristic(false);
+			}
 			m = getAStarMove();
 		} else {
 			aStarWinningMoveList.clear();
@@ -63,7 +65,7 @@ public class AwesomeAI extends Player {
 		Move m = null;
 
 		AB_BlackBox abbox=new AB_BlackBox(getMyturn());
-		AB_BlackBox.Message output=ABSearch.gimmeAMove(getBoard(), 4);
+		AB_BlackBox.Message output=ABSearch.gimmeAMove(getBoard(), 5);
 		if(output==AB_BlackBox.Message.NEED_TO_RECOMPUTE){
 			System.err.println("oh no, ab search not finding a move. sending null move");
 		}else{

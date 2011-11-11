@@ -12,6 +12,8 @@ public class Const {
 	public static final int CLOSING = 3;
 
 	// testing constants
-	public static final boolean AB_USE_HASHING = false;
+	public static final boolean AB_USE_MOVE_ORDERING = true;
+	public static final boolean AB_USE_HASHING = true;
   public static final boolean USE_ASTAR_CLOSING = false;
+	public static final boolean USE_ASTAR_CLOSING_HEURISTIC = false;
 }

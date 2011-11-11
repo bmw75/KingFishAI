@@ -3,6 +3,8 @@ import java.util.HashMap;
 import java.util.HashSet;
 
 public class AStarBlackBox {
+	boolean useClosingHeuristic = false;
+
 	EndGameBlackBox endGameBlackBox; // used to determine our target row/col
 	Cell targetCell;
 	int statesVisited = 0;
@@ -34,6 +36,10 @@ public class AStarBlackBox {
 		homeC = 12;
 	}
 
+	public void useClosingHeuristic(boolean b) {
+		useClosingHeuristic = b;
+	}
+
 	public void setMoveCutoff(int numMoveLimit) {
 		numMoveCutoff = numMoveLimit;
 	}
@@ -49,6 +55,11 @@ public class AStarBlackBox {
 	 * en.wikipedia.org/wiki/A*_search_algorithm
 	 */
 	public ArrayList<Move> aStarSearch(State start) {
+		if (useClosingHeuristic && Const.USE_ASTAR_CLOSING_HEURISTIC) {
+			System.err.println("Using closing heuristic...");
+		}
+		System.err.println("Using Astrizzles...");
+
 		winningMoves.clear();
 		statesVisited = 0;
 		HashSet<StateNode> hashedNodes = new HashSet<StateNode>(); // Nodes we've already checked
@@ -58,7 +69,8 @@ public class AStarBlackBox {
 
 		while (!nodesToCheck.isEmpty()) {
 			statesVisited++;
-			StateNode chosenNode = getNodeWithLowestFScore(nodesToCheck);
+			StateNode chosenNode;
+			chosenNode = getNodeWithLowestFScore(nodesToCheck);
 			targetCell = endGameBlackBox.getNewTargetCell(chosenNode.getState());
       /*
 			targetR = targetCell.getRow();
@@ -73,9 +85,15 @@ public class AStarBlackBox {
 			Util.printState(chosenNode.getState());
 		 	System.err.println("F cost: "	+ chosenNode.getF());
 			*/
+			/*
+		 	System.err.println("F cost: "	+ chosenNode.getF());
+		 	System.err.println("States visited: "	+ statesVisited);
+			*/
 
 			if(goalTest(chosenNode.getState()) || chosenNode.getDepth() >= numMoveCutoff){
 				// reconstruct the winning moves
+				System.err.println("Returning " + chosenNode.getDepth() + " moves.");
+		 	  System.err.println("States visited: "	+ statesVisited);
 				setWinningMoveList(chosenNode.getState(), start); 
 				return winningMoves;
 			}
@@ -191,43 +209,84 @@ public class AStarBlackBox {
 	// Heuristic cost: go through all marbles, add their distances to target area
 	public int getHeuristicCost(State s) {
 		int[][] board = s.reconstructBoardArray();
-		int targetTopR, targetBottomR;
 		int sumDistance = 0;
-		if (turn == 1) {
-			targetTopR = 0;
-			targetBottomR = 3;
-		} else {
-			targetTopR = 13;
-			targetBottomR = 16;
-		}
 
-		for (int i = 0; i < 17; i++) {
-			for (int j = 0; j < 25; j++) {
-				if (board[i][j] == turn) {
-					int dx = targetCell.getCol() - j;
-					int dy = targetCell.getRow() - i;
-					boolean isInTargetTriangle = (i <= targetBottomR && i >= targetTopR);
-					sumDistance += Util.euclideanDistSq(i, j, targetR, targetC);
-					if (isInTargetTriangle) {
-            if ((turn == 1 && i == 3) || (turn == 2 && i == 13)) {
-              // get the 4-cell row first
-              sumDistance -= 3;
-            } else if (Math.abs(dx) <= 3 && Math.abs(dy) == 1) {
-              // get the 4-cell and 2-cell rows first
-              sumDistance -= 2;
-            } else if (Math.abs(dx) <= 2 && dy != 0) {
-              // aim for the other cells, excluding center row
-              sumDistance -= 1;
-            }
-            /*
-						if (dx == 0 && dy == 0) {
-							// get to the center row quickly
-							sumDistance -= 3;
-						} else if (Math.abs(dx) <= 2 && dy != 0) {
-							// get the surrounding hexagon quickly
-							sumDistance -= 1;
+		if (useClosingHeuristic && Const.USE_ASTAR_CLOSING_HEURISTIC) {
+			// we want an optimistic search.
+			// assume you can take all the jumps possible.
+			for (int i = 0; i < 17; i++) {
+				for (int j = 0; j < 25; j++) {
+					if (board[i][j] == turn) {
+						// loop through the board again
+						// count how many pieces are at our level or ahead of us
+						// Optimistically, we'd jump over all of them.
+						int jumpablePieces = 0;
+						if (turn == 1) {
+							for (int y = 0; y <= i; y++) {
+								for (int x = 0; x < 25; x++) {
+									if ((board[y][x] == 1 || board[y][x] == 2) && !(y==i && x==j)) {
+										jumpablePieces++;
+									}
+								}
+							}
+						} else {
+							for (int y = i; y < 17; y++) {
+								for (int x = 0; x < 25; x++) {
+									if ((board[y][x] == 1 || board[y][x] == 2) && !(y==i && x== j)) {
+										jumpablePieces++;
+									}
+								}
+							}
 						}
-            */
+
+						sumDistance += Math.max(1, 1+Util.dist(i, j, targetR, targetC) - jumpablePieces*2);
+					}
+				}
+			}
+		} else {
+
+			int targetTopR, targetBottomR;
+			if (turn == 1) {
+				targetTopR = 0;
+				targetBottomR = 3;
+			} else {
+				targetTopR = 13;
+				targetBottomR = 16;
+			}
+
+			for (int i = 0; i < 17; i++) {
+				for (int j = 0; j < 25; j++) {
+					if (board[i][j] == turn) {
+						int dx = targetCell.getCol() - j;
+						int dy = targetCell.getRow() - i;
+						boolean isInTargetTriangle = (i <= targetBottomR && i >= targetTopR);
+						if (isInTargetTriangle) {
+							sumDistance += Util.dist(i, j, targetR, targetC);
+							/*
+								 if ((turn == 1 && i == 3) || (turn == 2 && i == 13)) {
+							// get the 4-cell row first
+							sumDistance -= 3;
+							} else if (Math.abs(dx) <= 3 && Math.abs(dy) == 1) {
+							// get the 4-cell and 2-cell rows first
+							sumDistance -= 2;
+							} else if (Math.abs(dx) <= 2 && dy != 0) {
+							// aim for the other cells, excluding center row
+							sumDistance -= 1;
+							}
+							*/
+						} else {
+							sumDistance += Util.euclideanDistSq(i, j, targetR, targetC);
+						}
+
+						/*
+							 if (dx == 0 && dy == 0) {
+						// get to the center row quickly
+						sumDistance -= 3;
+						} else if (Math.abs(dx) <= 2 && dy != 0) {
+						// get the surrounding hexagon quickly
+						sumDistance -= 1;
+						}
+						*/
 					}
 				}
 			}

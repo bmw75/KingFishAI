@@ -143,6 +143,13 @@ public class Util {
 			return 1;
 	}
 
+	// checks if a cell is in the target triangle (only need to know its row and turn)
+	public static boolean isInTargetTriangle(int row, int turn) {
+		int topR = turn == 1 ? 0 : 13;
+		int bottomR = turn == 1? 3 : 16;
+		return row <= bottomR && row >= topR;
+	}
+
 	/*
 	 * Helpful print functions for great justice.
 	 */
