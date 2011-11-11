@@ -22,6 +22,18 @@ public class AB_BlackBox {
 	HashMap<HashableBoard, Float> maxPlayerHash = new HashMap<HashableBoard, Float>(100000);
 	HashMap<HashableBoard, Float> minPlayerHash = new HashMap<HashableBoard, Float>(100000);
 
+	public float horzDistWeight = 1;
+	public float vertDistWeight = 1;
+	public float stragglerWeight = 1;
+	public float chainWeight = 1;
+	
+	public void setWeights (float horz, float vert, float straggler, float chain){
+		horzDistWeight=horz;
+		vertDistWeight=vert;
+		stragglerWeight = straggler;
+		chainWeight=chain;
+	}
+	
 	public static enum Message{
 		MOVE_FOUND,NEED_TO_RECOMPUTE;
 		//if move found, store it as 
@@ -43,9 +55,14 @@ public class AB_BlackBox {
 		}
 	}
 
-	public AB_BlackBox(int whichPlayer){
+	public AB_BlackBox(int whichPlayer, float horz, float vert, float straggler, float chain){
 		thisPlayer=whichPlayer;
 		otherPlayer=3-thisPlayer;
+		
+		horzDistWeight=horz;
+		vertDistWeight=vert;
+		stragglerWeight = straggler;
+		chainWeight=chain;
 	}
 
 	//main interaction interface
@@ -290,7 +307,7 @@ public class AB_BlackBox {
 	}
 
 	//higher utility is better
-	private static float utilityOfState(Board board, int turn) {
+	private float utilityOfState(Board board, int turn) {
 		int topR, oppTopR;
 		int bottomR, oppBottomR;
 		int middleR, middleC;
@@ -369,7 +386,11 @@ public class AB_BlackBox {
 				}
 			}
 		}
-		return utility;
+		
+		float chainUtil = 0; float stragglerUtil = 0; float horzDistUtil=0; float vertDistUtil=0; 
+		//TODO implement / segment up Utility into separate Utils for chains, stragglers, horizontal dist, and vert dist.
+		return vertDistWeight*utility + horzDistUtil + stragglerUtil + chainUtil;
+		//return vertDistWeight*utility + horzDistWeight*utility + chainWeight*chainUtil + stragglerWeight*stragglerUtil;
 	}
 
 	private static class HashableBoard {

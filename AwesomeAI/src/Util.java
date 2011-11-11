@@ -93,26 +93,26 @@ public class Util {
 	 * 		  If Unknown and Not Interacting -> defaults to Const.OPENING,
 	 * 		  PrevProg should only == Const.UNKNOWN first time called
 	 */
-	public static int progress(Board board, int prevProg){
+	public static int progress(Board board, int prevProg, float dist){
 		if (prevProg == Const.UNKNOWN){
-			if (interacting(board)) return Const.INTERACTING; else return Const.OPENING;
+			if (interacting(board, dist)) return Const.INTERACTING; else return Const.OPENING;
 		}
 		if (prevProg == Const.OPENING)
-			if (interacting(board)) return Const.INTERACTING; else return Const.OPENING;
+			if (interacting(board, dist)) return Const.INTERACTING; else return Const.OPENING;
 		if (prevProg == Const.INTERACTING)
-			if (!interacting(board)) return Const.CLOSING; else return Const.INTERACTING;
+			if (!interacting(board, dist)) return Const.CLOSING; else return Const.INTERACTING;
 		if (prevProg == Const.CLOSING)
 			return Const.CLOSING;
 		return prevProg; // If no decision can be made return prevProg
 						 // (other option is to simply return unknown, but prevProg should reduce computations)
 	}
-
-	private static boolean interacting(Board board){
+	
+	private static boolean interacting(Board board, float dist){
 		Piece[] myPieces = getPieces(board,1);
 		Piece[] hisPieces = getPieces(board,2);
 		for (Piece mine:myPieces){
 			for (Piece his:hisPieces){
-				if (euclideanDistSq(mine.r,mine.c,his.r,his.c) < 9) return true;
+				if (euclideanDistSq(mine.r,mine.c,his.r,his.c) < dist) return true;
 			}
 		}
 		

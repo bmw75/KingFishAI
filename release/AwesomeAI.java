@@ -12,10 +12,15 @@ public class AwesomeAI extends Player {
 	ArrayList<Move> aStarWinningMoveList = new ArrayList<Move>();
   AStarBlackBox aStarBlackBox;
 	AB_BlackBox ABSearch;
+	static float horz = 1;
+	static float vert = 1;
+	static float straggler = 1;
+	static float chain = 1;
+	static float interact = 1;
 	
 	public AwesomeAI(Scanner scanner) {
 		super(scanner);
-		ABSearch = new AB_BlackBox(getMyturn());
+		ABSearch = new AB_BlackBox(getMyturn(), horz, vert, straggler, chain);
 		aStarBlackBox = new AStarBlackBox(getMyturn());
 		aStarBlackBox.setMoveCutoff(5);
 	}
@@ -27,7 +32,7 @@ public class AwesomeAI extends Player {
 			currentState = new State(opponentMove, currentState);
 		}
 
-		gameProgress = Util.progress(getBoard(), gameProgress);
+		gameProgress = Util.progress(getBoard(), gameProgress, interact);
 		Util.printGameProgress(gameProgress);
 
 		Move m = null;
@@ -64,8 +69,9 @@ public class AwesomeAI extends Player {
 	public Move getAlphaBetaMove() {
 		Move m = null;
 
-		AB_BlackBox abbox=new AB_BlackBox(getMyturn());
-		AB_BlackBox.Message output=ABSearch.gimmeAMove(getBoard(), 5);
+		AB_BlackBox abbox=new AB_BlackBox(getMyturn(), horz, vert, straggler, chain);
+		AB_BlackBox.Message output=ABSearch.gimmeAMove(getBoard(), 4);
+
 		if(output==AB_BlackBox.Message.NEED_TO_RECOMPUTE){
 			System.err.println("oh no, ab search not finding a move. sending null move");
 		}else{
@@ -136,6 +142,16 @@ public class AwesomeAI extends Player {
 	}
 
 	public static void main(String args[]){
+		
+		if (args.length ==5){
+			System.err.println("THINGS ARE WORKING");
+			horz = Float.parseFloat(args[0]);
+			vert = Float.parseFloat(args[1]);
+			straggler = Float.parseFloat(args[2]);
+			chain = Float.parseFloat(args[3]);
+			interact = Float.parseFloat(args[4]);	
+		}
+				
 		int turn = 1;
 		AwesomeAI p = new AwesomeAI(new Scanner(System.in));
 

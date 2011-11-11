@@ -1,4 +1,5 @@
 #!/bin/bash
+cp ../AwesomeAI/src/MultiRunGameServer.java .
 cp ../AwesomeAI/src/AwesomeAI.java .
 cp ../AwesomeAI/src/MoveHasher.java .
 cp ../AwesomeAI/src/State.java .
