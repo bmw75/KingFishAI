@@ -24,6 +24,42 @@ public class Board {
 				{2, 10}, {2, 12}, {2, 14},
 				{3, 9},  {3, 11}, {3, 13}, {3, 15} },
 	};
+	
+	public boolean isHome(int r, int c){
+		return Util.isInTargetTriangle(r, 1) || Util.isInTargetTriangle(r, 2);
+		
+//		for (int i=0; i<2; i++){
+//			for(int j=0; j<10; j++){ 
+//				int x=homexy[i][j][0];
+//				int y=homexy[i][j][1];
+//				if (r == x && c == y){
+//					return true;
+//				}
+//			}
+//		}
+//		return false;
+		
+	/*	return (r==16 && c==12 ||
+				r==15 && c==11 ||
+				r==15 && c==13 ||
+				r==14 && c==10 ||
+				r==14 && c==12 ||
+				r==14 && c==14 ||
+				r==13 && c==9 ||
+				r==13 && c==11 ||
+				r==13 && c==13 ||
+				r==13 && c==15 ||
+				r==0 && c==12 ||
+				r==1 && c==11 ||
+				r==1 && c==13 ||
+				r==2 && c==10 ||
+				r==2 && c==12 ||
+				r==2 && c==14 ||
+				r==3 && c==9 ||
+				r==3 && c==11 ||
+				r==3 && c==13 ||
+				r==3 && c==15);	*/			
+	}
 
 	private static final String initialBoard[] = new String[] {
 		"            *            ",
@@ -320,6 +356,15 @@ public class Board {
 		board[m.r1][m.c1] = 0;		
 		turn = 3-turn;
 	}
+	
+	public void unmove(Move m) {
+		if (m.r3!=-1 && m.c3 !=-1){
+			board[m.r3][m.c3] = 0;
+		}
+		board[m.r1][m.c1] = board[m.r2][m.c2];	
+		board[m.r2][m.c2] = 0;
+		turn = 3-turn;
+	}
 
 	public void backwardMove(Move m) {
 		if (m.r3!=-1 && m.c3 !=-1){
@@ -337,6 +382,11 @@ public class Board {
 	public void setSpecialMarble(int myturn, int i, int j) {
 		board[i][j]=3;
 		specialsLeft[myturn-1]--;
+	}
+	
+	public void removeSpecialMarble(int myturn, int i, int j) {
+		board[i][j]=0;
+		specialsLeft[myturn-1]++;
 	}
 
 	public boolean canSetSpecialMarble(int myturn) {

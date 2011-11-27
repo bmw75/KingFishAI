@@ -8,7 +8,9 @@ cp ../AwesomeAI/src/Board.java .
 cp ../AwesomeAI/src/Const.java .
 cp ../AwesomeAI/src/Piece.java .
 cp ../AwesomeAI/src/Util.java .
+cp ../AwesomeAI/src/Evaluate.java .
 
+cp ../AwesomeAI/src/Special_BlackBox.java .
 cp ../AwesomeAI/src/AB_BlackBox.java .
 cp ../AwesomeAI/src/AStarBlackBox.java .
 cp ../AwesomeAI/src/EndGameBlackBox.java .

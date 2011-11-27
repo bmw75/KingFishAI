@@ -52,4 +52,9 @@ public class Move {
 		return c2;
 	}
 	
+	public String toString(){
+		return status + " " + t1 + " " + t2 + " " + r1 + " " + c1 + " " + r2 + " " + c2 + " " + r3 + " " + c3;
+	}
+
+	
 }

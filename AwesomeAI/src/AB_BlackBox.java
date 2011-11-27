@@ -26,12 +26,16 @@ public class AB_BlackBox {
 	public float vertDistWeight = 1;
 	public float stragglerWeight = 1;
 	public float chainWeight = 1;
+	public float bias = 1;
+	public float specialWeight = 1;
 	
-	public void setWeights (float horz, float vert, float straggler, float chain){
+	public void setWeights (float horz, float vert, float straggler, float chain, float b, float special){
 		horzDistWeight=horz;
 		vertDistWeight=vert;
 		stragglerWeight = straggler;
 		chainWeight=chain;
+		bias = b;
+		specialWeight = special;
 	}
 	
 	public static enum Message{
@@ -55,7 +59,7 @@ public class AB_BlackBox {
 		}
 	}
 
-	public AB_BlackBox(int whichPlayer, float horz, float vert, float straggler, float chain){
+	public AB_BlackBox(int whichPlayer, float horz, float vert, float straggler, float chain, float b, float special){
 		thisPlayer=whichPlayer;
 		otherPlayer=3-thisPlayer;
 		
@@ -63,6 +67,8 @@ public class AB_BlackBox {
 		vertDistWeight=vert;
 		stragglerWeight = straggler;
 		chainWeight=chain;
+		bias = b;
+		specialWeight = special;
 	}
 
 	//main interaction interface
@@ -72,7 +78,38 @@ public class AB_BlackBox {
 		minPlayerHash.clear();
 		hashHits = 0;
 		statesVisited = 0;
-		Move best=recompute(b,depth);
+		
+		Move best;
+		Move ab;
+		//Move special= null;
+		float specialUtil = -1;
+		int specialR = -1;
+		int specialC = -1;
+		
+		ab=recompute(b,depth);
+		b.move(ab);
+		Evaluate e = new Evaluate(horzDistWeight, vertDistWeight, stragglerWeight, chainWeight, bias);
+		float abUtil = e.getUtility(b, thisPlayer); 
+		b.unmove(ab);
+		
+		if (b.canSetSpecialMarble(thisPlayer)){
+			Special_BlackBox specialBox = new Special_BlackBox(	horzDistWeight , vertDistWeight , stragglerWeight, chainWeight , bias );
+			float[] data = specialBox.getSpecial(b, thisPlayer);
+			specialUtil = data[0];
+			specialR = (int) data[1];
+			specialC = (int) data[2];
+			//special =  new Move(0, 0, 0, ab.r1, ab.c1, ab.r2, ab.c2, specialR, specialC);
+		}
+		
+		System.err.println("Special Util: "+ specialUtil + " Alpha-Beta Util: " + abUtil);
+		//TODO
+		if (b.canSetSpecialMarble(thisPlayer) && Math.abs(specialUtil) > Math.abs(specialWeight*abUtil)){
+			b.setSpecialMarble(thisPlayer, specialR, specialC);
+			ab=recompute(b,depth);
+			best = new Move(ab.status, ab.t1, ab.t2, ab.r1, ab.c1, ab.r2, ab.c2, specialR, specialC);			
+		}
+		else{best = ab;}
+
 
 		// begin data printing:
 		System.err.println("ABStates visited: " + statesVisited);
@@ -157,7 +194,7 @@ public class AB_BlackBox {
 			long startTime = System.nanoTime();
 			Collections.sort(moveSet, new Comparator<Move>(){
 				HashMap<Move, Float> moveUtilityHash = new HashMap<Move, Float>(64);
-				@Override
+				//@Override
 				public int compare(Move m1, Move m2) {
 					float utility1, utility2;
 					if (moveUtilityHash.containsKey(m1)) {
@@ -231,7 +268,7 @@ public class AB_BlackBox {
 			long startTime = System.nanoTime();
 			Collections.sort(moveSet, new Comparator<Move>(){
 				HashMap<Move, Float> moveUtilityHash = new HashMap<Move, Float>(64);
-				@Override
+				//@Override
 				public int compare(Move m1, Move m2) {
 					float utility1, utility2;
 					if (moveUtilityHash.containsKey(m1)) {
@@ -308,89 +345,92 @@ public class AB_BlackBox {
 
 	//higher utility is better
 	private float utilityOfState(Board board, int turn) {
-		int topR, oppTopR;
-		int bottomR, oppBottomR;
-		int middleR, middleC;
-		int oppMiddleR, oppMiddleC;
+//		int topR, oppTopR;
+//		int bottomR, oppBottomR;
+//		int middleR, middleC;
+//		int oppMiddleR, oppMiddleC;
+//		
+//		if (turn == 1) {
+//			topR = 0;
+//			bottomR = 3;
+//			middleR = 2;
+//			middleC = 12;
+//
+//			oppTopR = 13;
+//			oppBottomR = 16;
+//			oppMiddleR = 14;
+//			oppMiddleC = 12;
+//		} else {
+//			topR = 13;
+//			bottomR = 16;
+//			middleR = 14;
+//			middleC = 12;
+//
+//			oppTopR = 0;
+//			oppBottomR = 3;
+//			oppMiddleR = 2;
+//			oppMiddleC = 12;
+//		}
+//
+//		float utility = 0;
+//		for (int i = 0; i < 17; i++) {
+//			for (int j = 0; j < 25; j++) {
+//				int at=board.at(i, j);
+//				//count only pieces belonging to the players
+//				if(at==1 || at==2){
+//					boolean isInTargetTriangle = Util.isInTargetTriangle(i, at);
+//					int dx,dy;
+//					if(at==turn){
+//						dy=(middleR-i);
+//						dx=(middleC-j);
+//					}else{
+//						dy=(oppMiddleR-i);
+//						dx=(oppMiddleC-j);
+//					}
+//					//change utility function based on where we are
+//					//if we're in the goal space, try to go for the center
+//					//where score is 0 at the center of triangle
+//					//1 on the hexagon around
+//					//and 2 at the corners
+//					float utilToAdd;
+//					//are we in the target triangle?
+//					if (isInTargetTriangle) {
+////					if(Math.abs(dy)<=1){
+//						//yes
+//						//weigh distance laterally and sideways as well
+//						//use hexagonal grid distance
+//						//abs(dx)==2 means lateral pieces
+//						if(dx==0 && dy==0){
+//							utilToAdd=0;
+//						}else if(Math.abs(dx)<=2 && dy!=0){
+//							utilToAdd=-1;
+//						}else{
+//							utilToAdd=-3;
+//						}
+//						if(at!=turn){
+//							utilToAdd=-utilToAdd;
+//						}
+//					}else{
+//						//we're not in the winning corner
+//						//prioritize the score to make it sort first by y distance
+//						utilToAdd=(-(Math.abs(dy)*13+Math.abs(dx)));
+//						if(at!=turn){
+//							utilToAdd=-utilToAdd;
+//						}
+//					}
+//					//update utility
+//					utility+=utilToAdd;
+//				}
+//			}
+//		}
+//		
+//		float chainUtil = 0; float stragglerUtil = 0; float horzDistUtil=0; float vertDistUtil=0; 
+//		//TODO implement / segment up Utility into separate Utils for chains, stragglers, horizontal dist, and vert dist.
+//		return vertDistWeight*utility + horzDistUtil + stragglerUtil + chainUtil;
+//		//return vertDistWeight*utility + horzDistWeight*utility + chainWeight*chainUtil + stragglerWeight*stragglerUtil;
 		
-		if (turn == 1) {
-			topR = 0;
-			bottomR = 3;
-			middleR = 2;
-			middleC = 12;
-
-			oppTopR = 13;
-			oppBottomR = 16;
-			oppMiddleR = 14;
-			oppMiddleC = 12;
-		} else {
-			topR = 13;
-			bottomR = 16;
-			middleR = 14;
-			middleC = 12;
-
-			oppTopR = 0;
-			oppBottomR = 3;
-			oppMiddleR = 2;
-			oppMiddleC = 12;
-		}
-
-		float utility = 0;
-		for (int i = 0; i < 17; i++) {
-			for (int j = 0; j < 25; j++) {
-				int at=board.at(i, j);
-				//count only pieces belonging to the players
-				if(at==1 || at==2){
-					boolean isInTargetTriangle = Util.isInTargetTriangle(i, at);
-					int dx,dy;
-					if(at==turn){
-						dy=(middleR-i);
-						dx=(middleC-j);
-					}else{
-						dy=(oppMiddleR-i);
-						dx=(oppMiddleC-j);
-					}
-					//change utility function based on where we are
-					//if we're in the goal space, try to go for the center
-					//where score is 0 at the center of triangle
-					//1 on the hexagon around
-					//and 2 at the corners
-					float utilToAdd;
-					//are we in the target triangle?
-					if (isInTargetTriangle) {
-//					if(Math.abs(dy)<=1){
-						//yes
-						//weigh distance laterally and sideways as well
-						//use hexagonal grid distance
-						//abs(dx)==2 means lateral pieces
-						if(dx==0 && dy==0){
-							utilToAdd=0;
-						}else if(Math.abs(dx)<=2 && dy!=0){
-							utilToAdd=-1;
-						}else{
-							utilToAdd=-3;
-						}
-						if(at!=turn){
-							utilToAdd=-utilToAdd;
-						}
-					}else{
-						//we're not in the winning corner
-						//prioritize the score to make it sort first by y distance
-						utilToAdd=(-(Math.abs(dy)*13+Math.abs(dx)));
-						if(at!=turn){
-							utilToAdd=-utilToAdd;
-						}
-					}
-					//update utility
-					utility+=utilToAdd;
-				}
-			}
-		}
-		
-		float chainUtil = 0; float stragglerUtil = 0; float horzDistUtil=0; float vertDistUtil=0; 
-		//TODO implement / segment up Utility into separate Utils for chains, stragglers, horizontal dist, and vert dist.
-		return vertDistWeight*utility + horzDistUtil + stragglerUtil + chainUtil;
-		//return vertDistWeight*utility + horzDistWeight*utility + chainWeight*chainUtil + stragglerWeight*stragglerUtil;
+		Evaluate e = new Evaluate(horzDistWeight, vertDistWeight, stragglerWeight, chainWeight, bias);
+		return e.getUtility(board, turn);
 	}
 
 	private static class HashableBoard {

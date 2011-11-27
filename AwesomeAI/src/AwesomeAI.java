@@ -17,10 +17,12 @@ public class AwesomeAI extends Player {
 	static float straggler = 1;
 	static float chain = 1;
 	static float interact = 1;
+	static float bias =1;
+	static float special=1;
 	
 	public AwesomeAI(Scanner scanner) {
 		super(scanner);
-		ABSearch = new AB_BlackBox(getMyturn(), horz, vert, straggler, chain);
+		ABSearch = new AB_BlackBox(getMyturn(), horz, vert, straggler, chain, bias, special);
 		aStarBlackBox = new AStarBlackBox(getMyturn());
 		aStarBlackBox.setMoveCutoff(5);
 	}
@@ -69,7 +71,7 @@ public class AwesomeAI extends Player {
 	public Move getAlphaBetaMove() {
 		Move m = null;
 
-		AB_BlackBox abbox=new AB_BlackBox(getMyturn(), horz, vert, straggler, chain);
+		AB_BlackBox abbox=new AB_BlackBox(getMyturn(), horz, vert, straggler, chain, bias, special);
 		AB_BlackBox.Message output=ABSearch.gimmeAMove(getBoard(), 4);
 
 		if(output==AB_BlackBox.Message.NEED_TO_RECOMPUTE){
@@ -143,13 +145,15 @@ public class AwesomeAI extends Player {
 
 	public static void main(String args[]){
 		
-		if (args.length ==5){
+		if (args.length ==7){
 			System.err.println("THINGS ARE WORKING");
 			horz = Float.parseFloat(args[0]);
 			vert = Float.parseFloat(args[1]);
 			straggler = Float.parseFloat(args[2]);
 			chain = Float.parseFloat(args[3]);
-			interact = Float.parseFloat(args[4]);	
+			interact = Float.parseFloat(args[4]);
+			bias = Float.parseFloat(args[5]);
+			special = Float.parseFloat(args[6]);
 		}
 				
 		int turn = 1;

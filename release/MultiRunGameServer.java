@@ -187,11 +187,23 @@ public class MultiRunGameServer {
 	
 	private static String[] getSuccessors(float[] start){
 		String[] weights = {
-		start[0]*(Math.random()+.5) + " " + start[1]  + " " + start[2]  + " " + start[3]  + " " + start[4],
-		start[0] + " " + start[1]*(Math.random()+.5)  + " " + start[2]  + " " + start[3]  + " " + start[4],
-		start[0] + " " + start[1]  + " " + start[2]*(Math.random()+.5)  + " " + start[3]  + " " + start[4],
-		start[0] + " " + start[1]  + " " + start[2]  + " " + start[3]*(Math.random()+.5)  + " " + start[4],
-		start[0] + " " + start[1]  + " " + start[2]  + " " + start[3]  + " " + start[4]*(Math.random()+.5),
+		start[0]*(Math.random()+.5) + " " + start[1]  + " " + start[2]  + " " + start[3]  + " " + start[4] + " " + start[5] + " " + start[6],
+		start[0] + " " + start[1]*(Math.random()+.5)  + " " + start[2]  + " " + start[3]  + " " + start[4] + " " + start[5] + " " + start[6],
+		//start[0] + " " + start[1]  + " " + start[2]*(Math.random()+.5)  + " " + start[3]  + " " + start[4] + " " + start[5] + " " + start[6],
+		start[0] + " " + start[1]  + " " + start[2]  + " " + start[3]*(Math.random()+.5)  + " " + start[4] + " " + start[5] + " " + start[6],
+		start[0] + " " + start[1]  + " " + start[2]  + " " + start[3]  + " " + start[4]*(Math.random()+.5) + " " + start[5] + " " + start[6],
+		start[0] + " " + start[1]  + " " + start[2]  + " " + start[3] + " " + start[4] + " " + start[5]*(Math.random()+.5)  + " " + start[6],
+		start[0] + " " + start[1]  + " " + start[2]  + " " + start[3] + " " + start[4] + " " + start[5]  + " " + start[6]*(Math.random()+.5)
+				
+//		start[0]+(Math.random()-.5) + " " + start[1]  + " " + start[2]  + " " + start[3]  + " " + start[4] + " " + start[5] + " " + start[6],
+//		start[0] + " " + start[1]+(Math.random()-.5)  + " " + start[2]  + " " + start[3]  + " " + start[4] + " " + start[5] + " " + start[6],
+//		//start[0] + " " + start[1]  + " " + start[2]+(Math.random()-.5)  + " " + start[3]  + " " + start[4] + " " + start[5] + " " + start[6],
+//		start[0] + " " + start[1]  + " " + start[2]  + " " + start[3]+(Math.random()-.5)  + " " + start[4] + " " + start[5] + " " + start[6],
+//		start[0] + " " + start[1]  + " " + start[2]  + " " + start[3]  + " " + start[4]+(Math.random()-.5) + " " + start[5] + " " + start[6],
+//		start[0] + " " + start[1]  + " " + start[2]  + " " + start[3] + " " + start[4] + " " + start[5]+(Math.random()-.5)  + " " + start[6],
+//		start[0] + " " + start[1]  + " " + start[2]  + " " + start[3] + " " + start[4] + " " + start[5]  + " " + start[6]+(Math.random()-.5),
+				
+		//start[0]*(Math.random()+.5) + " " + start[1]*(Math.random()+.5)  + " " + start[2]*(Math.random()+.5)  + " " + start[3]*(Math.random()+.5) + " " + start[4]*(Math.random()+.5) + " " + start[5]*(Math.random()+.5)  + " " + start[6]*(Math.random()+.5)
 		};
 		return weights;
 	}
@@ -401,7 +413,7 @@ public class MultiRunGameServer {
 		        }
 			}
 			if (winWeights.size()>0){
-				p1weights = winWeights.get((int) Math.round(Math.random()*winWeights.size()));
+				p1weights = winWeights.get((int) Math.round(Math.random()*winWeights.size()-1));
 			}
 			runs--;
 		}
